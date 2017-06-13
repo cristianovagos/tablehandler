@@ -8,41 +8,34 @@ public class Table
 {
     /*  ATRIBUTOS DA CLASSE  */
     private List<List<String>> table;
-    private List<String> header;
 
     /*  CONSTRUTORES  */
     // Recebe o caminho para um ficheiro csv, que é lido
     public Table(String path){
         this.table = readCSV(path);
-        this.header = table.get(0);
     }
 
     /* Construir uma tabela baseada numa List<List<String>> */
     public Table(List<List<String>> table)
     {
         this.table = table;
-        this.header = table.get(0);
     }
 
     /* Construtor cópia */
     public Table(Table other)
     {
         this.table = other.table;
-        this.header = other.header;
     }
     
     public static void main(String[] args){
         /*Table tbl = new Table("/home/cristiano/Área de Trabalho/LFA/Pratica/proj/csvtable/CSV/example.csv");
         System.out.println(tbl.table.toString());
-        System.out.println("\nHeader: \n" + tbl.header.toString());
         System.out.println("\nColuna 3 s/ header \n" + tbl.getColumn(3, false));
         System.out.println("\nColuna 3 c/ header \n" + tbl.getColumn(3, true));
         System.out.println("\nColuna 3 Unique: \n" + tbl.getUnique(3));
         System.out.println("\nColuna 1 e 2: \n" + tbl.subTableCol(1, 2));
         System.out.println("\nColuna 1 para a frente: \n" + tbl.subTableCol(1));
         System.out.println("\nLinha 1 para a frente: \n" + tbl.subTableRow(1));
-        System.out.println("\nHeader: \n" + tbl.header);
-        System.out.println("\nHeader Size: \n" + tbl.header.size());
         System.out.println("\nColuna 1 para a frente: \n" + tbl.subTableCol(1));
         System.out.println("\nLinha 1: \n" + tbl.getRow(1));
         System.out.println("\nLinha 2: \n" + tbl.getRow(2));
@@ -81,11 +74,19 @@ public class Table
         System.out.println("\n(Tabela t2)");
         t2.printTable();
     
+        List<String> col = t1.getColumn(0, true);
+        
+
         Table t3;
-        System.out.println("\n(Tabela t2 + tbl)");
-        t3 = t1.addTable(t2);
+        System.out.println("\n(Tabela t2 - t1)");
+        t3 = t2.subTable(t2);
         t3.printTable();
-}
+
+        System.out.println("\n(Tabela t2 == t2)");
+        System.out.println(t2.isEqual(t2));
+
+        t2.export("t2");
+    }
 
     /*  LER FICHEIRO CSV  */
     public List<List<String>> readCSV(String path){
@@ -104,6 +105,14 @@ public class Table
             e.printStackTrace();
         }
         return table;
+    }
+
+    /*  */
+    public void setValue(int row, int col, String value)
+    {
+        assert row >= 0 && row < numRows();
+        assert col >= 0 && col < numColumns();
+        table.get(row).set(col, value);
     }
     
     /* Obter valor */
@@ -175,8 +184,11 @@ public class Table
     public void removeCol(int idx)
     {
         assert idx >= 0 && idx < numColumns();
-        for(int i = 0; i < numRows(); i++)
-            table.get(i).remove(idx);
+        for(int i = 0; i < numRows(); i++){
+            List<String> tmp = new ArrayList<>(table.get(i));
+            tmp.remove(idx);
+            table.set(i, tmp);
+        }
     }
 
     /* Limpar um campo da tabela */
@@ -232,8 +244,8 @@ public class Table
     /* Obter o indice da coluna pelo seu valor */
     public int getHeaderIndex(String s)
     {
-        for(int i = 0; i < header.size(); i++){
-            if(header.get(i).equals(s))
+        for(int i = 0; i < numColumns(); i++){
+            if(table.get(0).get(i).equals(s))
                 return i;
         }
         return -1;
@@ -301,81 +313,82 @@ public class Table
     /* Soma de 2 tabelas */
     public Table addTable(Table b)
     {
-        Table res;
-        boolean bLarger = false;
-       
-        if(numColumns()*numRows() > b.numColumns()*b.numRows()){
-            res = new Table(this);
+        Table res = new Table(this);
+        for(int i = 0; i < b.numColumns(); i++){
+            res.addCol(b.getColumn(i, true));
         }
-        else{
-            res = new Table(b);
-            bLarger = true;
-        }
+        return res;
+    }
 
-        if(bLarger)
-        {
-            //for(int i = 0; i < )
-        }
-        else{
-            for(int i = 0; i < numColumns(); i++){
-                for(int j = 0; j < b.numColumns(); j++){
-                    /* verifica se os headers sao iguais */
-                    if(b.getValue(0, j).equals(getValue(0, i))){
-                        for(int k = 1; k < b.numRows(); k++){
-                            List<String> tmpList = new ArrayList<String>(Collections.nCopies(numColumns(), ""));
-                            tmpList.set(j, b.getValue(k, j));
-                            res.addRow(tmpList);
-                        }
-                    }
-                    else{
-                        res.addCol(b.getColumn(j, true));
-                        j++;
-                    }
+    public Table subTable(Table b)
+    {
+        Table res = new Table(this);
+        for(int i = 0; i < numColumns(); i++){
+            for(int j = 0; j < b.numColumns(); j++){
+                if(getColumn(i,true).equals(b.getColumn(j,true))){
+                    res.removeCol(i);
                 }
             }
         }
         return res;
     }
 
-    /* WIP */
-    public void printTable(){
-        /*System.out.println("Table");
-        int i = 0;
-        int[] max = new int[t.table.size()];
-        Arrays.fill(max, Integer.MIN_VALUE);
-        for(List<String> tmp : t.table){
-            for(String tmpStr : tmp){
-                if(tmpStr.length() > max[i])
-                    max[i] = tmpStr.length();
-            }
-            i++;
-        }
-
-        for(List<String> tmp : t.table){
-            for(String tmpStr : tmp){
-                System.out.println(String.join("", Collections.nCopies((IntStream.of(max).sum() + t.table.size()), "-")));
-
-            }
-        }
-        System.out.println("");
-        return ;*/
-
+    public void sort()
+    {
         for(int i = 0; i < numRows(); i++)
-        {
+            Collections.sort(getRow(i));
+    }
+
+    public boolean isEqual(Table t)
+    {
+        return table.containsAll(t.table);
+    }
+
+    public void export(String filename)
+    {
+        PrintWriter pw = null;
+        try{
+            pw = new PrintWriter(new File(filename + ".csv"));
+        }
+        catch(FileNotFoundException e){
+            e.printStackTrace();
+        }
+        StringBuilder sb = new StringBuilder();
+        for(int i = 0; i < numRows(); i++){
+            for(int j = 0; j < numColumns(); j++){
+                sb.append(getValue(i, j));
+                
+                if(j < numColumns()-1)
+                    sb.append(",");
+            }
+            sb.append("\n");
+        }
+        pw.write(sb.toString());
+        pw.close();
+    }
+
+    public void printTable()
+    {
+        for(int i = 0; i < numRows(); i++){
             System.out.println(getRow(i));
         }
     }
 
-
     /* Imprime as primeiras x linhas */
     public void head(int num)
     {
-
+        assert num > 0 && num < numRows();
+        for(int i = 0; i < num; i++){
+            System.out.println(getRow(i));
+        }
     }
 
     /* Imprime as ultimas x linhas */
     public void tail(int num)
     {
-
+        assert num >= 0 && num < numRows();
+        for(int i = num; i < numRows(); i++){
+            System.out.println(getRow(i));
+        }
     }
 }
