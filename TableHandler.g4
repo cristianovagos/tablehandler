@@ -16,7 +16,7 @@ stat: declaration   DELIMITER
     ;
 //
 // Variable declaration
-declaration: t=dataType var=ID ('=' expr)?;
+declaration: t=dataType var=ID ('=' v=expr)?;
 
 // Variable assignment
 assignment: var=ID '=' e=expr  #assignExpr
@@ -24,7 +24,7 @@ assignment: var=ID '=' e=expr  #assignExpr
     ;
 
 // Print expression to console
-print: 'print' expr;
+print: 'print' e1=expr;
 
 // Contitional statement
 condition: ifStatement elseIfList* elseStatement?;
@@ -43,16 +43,18 @@ expr: n=numExpr
     ;
 
 // TODO: var/table ops
-numExpr: e1=numExpr op=('+'|'-') e2=numExpr
-    |    e1=numExpr op=('*'|'/') e2=numExpr
-    |    '(' e1=numExpr ')'
-    |    e3=INTEGER
+numExpr: e1=numExpr op=('+'|'-') e2=numExpr #SumSub
+    |    e1=numExpr op=('*'|'/') e2=numExpr #MulDiv
+    |    '(' e1=numExpr ')'                 #Par
+    |    e3=INTEGER                         #Int
+    |    v=ID                               #Var
     ;
 
-boolExpr: BOOLEAN
-    |     e1=boolExpr op=('||'|'&&') e2=boolExpr
+boolExpr: e1=boolExpr op=('||'|'&&') e2=boolExpr
     |     e1=boolExpr op=('=='|'!=') e2=boolExpr
-    |     '(' e1=boolExpr ')'  
+    |     '(' e1=boolExpr ')'
+    |     BOOLEAN
+    |     v=ID 
     ;
 
 // TODO: compare vars

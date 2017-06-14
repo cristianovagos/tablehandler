@@ -1,0 +1,5 @@
+antlr4 -visitor TableHandler.g4 && javac TableHandler*.java
+rm TableHandlerMain.java && antlr4-main -l TableListener.java -v TableVisitor.java TableHandler.g4 main &
+& javac TableHandlerMain.java
+javac TableHandlerMain.java
+java TableHandlerMain
