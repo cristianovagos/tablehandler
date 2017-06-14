@@ -4,29 +4,55 @@ import java.util.stream.*;
 
 import java.lang.System.*;
 
+
+/**
+* <h1>Classe Table</h1>
+* Classe que implementa uma Tabela e respectivas operações
+* de manipulação da mesma, em colunas, linhas ou mesmo a
+* tabela completa.
+* <p>
+* Ficheiro faz parte do Trabalho Prático de Linguagens Formais
+* e Autómatos, do curso de Eng. de Computadores e Telemática
+* da Universidade de Aveiro.
+* <p>
+* 
+*
+* @author  Cristiano Vagos (cristianovagos@ua.pt), Paulo Gil (paulogil@ua.pt)
+* @version 1.0
+* @since   2017-06-14 
+*/
+
 public class Table
 {
-    /*  ATRIBUTOS DA CLASSE  */
+    /**  
+    * A Tabela propriamente dita.
+    */
     private List<List<String>> table;
 
-    /*  CONSTRUTORES  */
-    // Recebe o caminho para um ficheiro csv, que é lido
+    /**
+    * Cria uma Tabela a partir de um caminho para um 
+    * ficheiro CSV.
+    * @param path Caminho absoluto para o ficheiro CSV
+    */
     public Table(String path){
         this.table = readCSV(path);
     }
 
-    /* Construir uma tabela baseada numa List<List<String>> */
-    public Table(List<List<String>> table)
-    {
-        this.table = table;
-    }
-
-    /* Construtor cópia */
+    /**
+    * Cria uma Tabela a partir de uma outra Tabela 
+    * (objecto) já existente.
+    * @param other Tabela já existente
+    */
     public Table(Table other)
     {
         this.table = other.table;
     }
     
+    /**
+    * Função principal.
+    * Usada para testes das funcionalidades.
+    * @param args Sequência de argumentos aquando da execução do ficheiro 
+    */
     public static void main(String[] args){
         /*Table tbl = new Table("/home/cristiano/Área de Trabalho/LFA/Pratica/proj/csvtable/CSV/example.csv");
         System.out.println(tbl.table.toString());
@@ -85,10 +111,35 @@ public class Table
         System.out.println("\n(Tabela t2 == t2)");
         System.out.println(t2.isEqual(t2));
 
-        t2.export("t2");
+        System.out.println("\n(Maximo da coluna 0 da coluna 1)");
+        System.out.println(t1.max(t1.getColumn(0, true)));
+
+        System.out.println("\n(Mínimo da coluna 0 da tabela 1)");
+        System.out.println(t1.min(t1.getColumn(0, true)));
+
+        System.out.println("\n(Soma da coluna 0 da tabela 1)");
+        System.out.println(t1.sum(t1.getColumn(0, false)));
+
+        System.out.println("\n(Média da coluna 0 da tabela 1)");
+        System.out.println(t1.avg(t1.getColumn(0, false)));
+
+        Table tAux = new Table(t1);
+
+        System.out.println("\nTabela t1 ordenada ascendente");
+        t1.sort();
+        t1.printTable();
+
+        System.out.println("\nTabela t1 ordenada descendente");
+        tAux.sortDesc();
+        tAux.printTable();
     }
 
-    /*  LER FICHEIRO CSV  */
+    /**
+    * Função que irá fazer o parse do ficheiro dado
+    * por argumento.
+    * @param path Caminho absoluto para o ficheiro CSV
+    * @return Uma lista de listas, com os dados retirados do ficheiro
+    */
     public List<List<String>> readCSV(String path){
         List<List<String>> table = new ArrayList<List<String>>();
         List<String> row = new ArrayList<String>();
@@ -107,7 +158,12 @@ public class Table
         return table;
     }
 
-    /*  */
+    /**
+    * Modificar um valor específico da tabela.
+    * @param row Linha da Tabela
+    * @param col Coluna da Tabela
+    * @param value O novo valor
+    */
     public void setValue(int row, int col, String value)
     {
         assert row >= 0 && row < numRows();
@@ -115,7 +171,12 @@ public class Table
         table.get(row).set(col, value);
     }
     
-    /* Obter valor */
+    /**
+    * Obter um valor específico da tabela.
+    * @param row Linha da Tabela
+    * @param col Coluna da Tabela
+    * @return O valor, dado a linha e a coluna 
+    */
     public String getValue(int row, int col)
     {
         assert row >= 0 && row < numRows();
@@ -123,14 +184,24 @@ public class Table
         return table.get(row).get(col);
     }
 
-    /* Adicionar linha no fim */
+    /**
+    * Adiciona uma linha no fim da Tabela, dado uma
+    * lista com o conteúdo a ser guardado
+    * @param l Lista com o conteúdo a ser colocado.
+    */
     public void addRow(List<String> l)
     {
         assert l.size() > 0 && l.size() <= numColumns();
         table.add(l);
     }
 
-    /* Adicionar linha num indice especifico */
+    /**
+    * Adiciona uma linha no índice da linha dado, 
+    * dado uma lista com o conteúdo a ser guardado.
+    * Não substitui a linha anterior, esta passa para baixo.  
+    * @param idx Índice da linha
+    * @param l Lista com o conteúdo a ser colocado.
+    */
     public void addRow(int idx, List<String> l)
     {
         assert l.size() > 0 && l.size() <= numColumns();
@@ -138,7 +209,10 @@ public class Table
         table.add(idx, l);
     }
 
-    /* Limpar uma linha da tabela */
+    /**
+    * Limpa a linha dada.
+    * @param idx Índice da linha
+    */
     public void clearRow(int idx)
     {
         assert idx >= 0 && idx < numRows();
@@ -146,14 +220,21 @@ public class Table
             table.get(idx).set(i, "");
     }
 
-    /* Remover uma linha */
+    /**
+    * Apaga a linha dada.
+    * @param idx Índice da linha
+    */
     public void removeRow(int idx)
     {
         assert idx >= 0 && idx < numRows();
         table.remove(idx);
     }
 
-    /* Adicionar coluna no fim */
+    /**
+    * Adiciona uma coluna à direita da última existente 
+    * dado uma lista com o conteúdo a ser guardado.
+    * @param l Lista com o conteúdo a ser colocado.
+    */
     public void addCol(List<String> l)
     {
         for(int i = 0; i < numRows(); i++){
@@ -166,7 +247,13 @@ public class Table
         }
     }
 
-    /* Adicionar coluna num indice especifico */
+    /**
+    * Adiciona uma coluna no índice da coluna dado, 
+    * dado uma lista com o conteúdo a ser guardado.
+    * Não substitui a coluna anterior, esta passa para baixo.  
+    * @param idx Índice da coluna
+    * @param l Lista com o conteúdo a ser colocado.
+    */
     public void addCol(int idx, List<String> l)
     {
         assert idx >= 0 && idx < numColumns();
@@ -180,7 +267,10 @@ public class Table
         }
     }
 
-    /* Remover uma coluna */
+    /**
+    * Apaga uma coluna.
+    * @param idx Índice da coluna
+    */
     public void removeCol(int idx)
     {
         assert idx >= 0 && idx < numColumns();
@@ -191,7 +281,11 @@ public class Table
         }
     }
 
-    /* Limpar um campo da tabela */
+    /**
+    * Limpa um campo da tabela.
+    * @param row Índice da linha
+    * @param col Índice da coluna
+    */
     public void clearField(int row, int col)
     {
         assert row >= 0 && row < numRows();
@@ -199,18 +293,29 @@ public class Table
         table.get(row).set(col, "");
     }
 
-    /* Tamanho da tabela (colunas, linhas) */
+    /**
+    * Obtém o número de colunas da tabela
+    * @return Número de colunas da tabela.
+    */
     public int numColumns()
     {
         return table.get(0).size();
     }
 
+    /**
+    * Obtém o número de linhas da tabela
+    * @return Número de linhas da tabela.
+    */
     public int numRows()
     {
         return table.size();
     }
 
-    /* Obtém coluna c/valores não duplicados */
+    /**
+    * Obtém uma coluna dada, sem valores repetidos.
+    * @param idx Índice da coluna
+    * @return A coluna sem valores repetidos
+    */
     public List<String> getUnique(int idx)
     {
         assert idx >= 0 && idx < numColumns();
@@ -224,7 +329,13 @@ public class Table
         return res;
     }
 
-    /* Obter coluna com o índice "idx", c/ ou s/ header */
+    /**
+    * Obter uma coluna dada, com ou sem o
+    * header (primeira linha).
+    * @param idx Índice da coluna
+    * @param header Com (true) ou sem (false) o header
+    * @return A coluna dada com ou sem o header
+    */
     public List<String> getColumn(int idx, boolean header)
     {
         assert idx >= 0 && idx < numColumns();
@@ -234,14 +345,22 @@ public class Table
         return tmp;
     }
 
-    /* Obter linha com o índice "idx" */
+    /**
+    * Obter uma linha dada um índice.
+    * @param idx Índice da linha
+    * @return A linha no índice dado
+    */
     public List<String> getRow(int idx)
     {
         assert idx >= 0 && idx <= numRows();
         return table.get(idx);
     }
 
-    /* Obter o indice da coluna pelo seu valor */
+    /**
+    * Obtém o índice da coluna dado o valor do header.
+    * @param s Valor a ser procurado
+    * @return Índice da coluna onde está o valor
+    */
     public int getHeaderIndex(String s)
     {
         for(int i = 0; i < numColumns(); i++){
@@ -251,7 +370,12 @@ public class Table
         return -1;
     }
 
-    /* Devolve uma subtabela entre a coluna "startIdx" e "endIdx" (já trocada) */
+    /**
+    * Obter uma sub-tabela entre duas colunas
+    * @param startIdx Índice inicial
+    * @param endIdx Índice final (inclusive)
+    * @return A sub-tabela
+    */
     public List<List<String>> subTableCol(int startIdx, int endIdx)
     {
         assert startIdx >= 0 && startIdx <= endIdx;
@@ -263,9 +387,14 @@ public class Table
         return switchColRow(tmp);
     }
 
-    /* Devolve uma subtabela entre a coluna "startIdx" e o fim (já trocada) */
+    /**
+    * Obter uma sub-tabela a partir de uma coluna
+    * @param startIdx Índice inicial
+    * @return A sub-tabela
+    */
     public List<List<String>> subTableCol(int startIdx)
     {
+        assert table != null;
         assert startIdx >= 0;
         List<List<String>> tmp = new ArrayList<List<String>>();
         for(int i = startIdx; i < numColumns(); i++)
@@ -274,9 +403,15 @@ public class Table
         return switchColRow(tmp);
     }
 
-    /* Devolve uma subtabela entre a linha "startIdx" e "endIdx" */
+    /**
+    * Obter uma sub-tabela entre duas linhas
+    * @param startIdx Índice inicial
+    * @param endIdx Índice final (inclusive)
+    * @return A sub-tabela
+    */
     public List<List<String>> subTableRow(int startIdx, int endIdx)
     {
+        assert table != null;
         assert startIdx >= 0;
         assert endIdx < table.size();
         List<List<String>> tmp = new ArrayList<List<String>>();
@@ -286,9 +421,14 @@ public class Table
         return tmp;
     }
 
-    /* Devolve uma subtabela entre a linha "startIdx" e o fim */
+    /**
+    * Obter uma sub-tabela a partir de uma linha
+    * @param startIdx Índice inicial
+    * @return A sub-tabela
+    */
     public List<List<String>> subTableRow(int startIdx)
     {
+        assert table != null;
         assert startIdx >= 0;
         List<List<String>> tmp = new ArrayList<List<String>>();
         for(int i = startIdx; i < numRows(); i++)
@@ -297,9 +437,16 @@ public class Table
         return tmp;
     }
 
-    /* "Transposta" da lista */
+    /**
+    * Obter uma tabela transposta, isto é, trocar
+    * as linhas com as colunas
+    * @param list A tabela
+    * @return A tabela já modificada
+    */
     public List<List<String>> switchColRow(List<List<String>> list)
     {
+        assert table != null;
+        assert list != null;
         List<List<String>> tmp = new ArrayList<List<String>>();
         for(int i = 0; i < list.get(0).size(); i++){
             List<String> tmpList = new ArrayList<>();
@@ -310,22 +457,37 @@ public class Table
         return tmp;
     }
 
-    /* Soma de 2 tabelas */
-    public Table addTable(Table b)
+    /**
+    * Soma entre duas tabelas
+    * (junta as colunas das duas tabelas)
+    * @param t A tabela a ser somada
+    * @return Uma tabela resultante da operação
+    */
+    public Table addTable(Table t)
     {
+        assert table != null;
+        assert t != null;
         Table res = new Table(this);
-        for(int i = 0; i < b.numColumns(); i++){
-            res.addCol(b.getColumn(i, true));
+        for(int i = 0; i < t.numColumns(); i++){
+            res.addCol(t.getColumn(i, true));
         }
         return res;
     }
 
-    public Table subTable(Table b)
+    /**
+    * Subtração entre duas tabelas
+    * (remove colunas caso o header seja igual)
+    * @param t A tabela a ser subtraída
+    * @return Uma tabela resultante da operação
+    */
+    public Table subTable(Table t)
     {
+        assert table != null;
+        assert t != null;
         Table res = new Table(this);
         for(int i = 0; i < numColumns(); i++){
-            for(int j = 0; j < b.numColumns(); j++){
-                if(getColumn(i,true).equals(b.getColumn(j,true))){
+            for(int j = 0; j < t.numColumns(); j++){
+                if(getColumn(i,true).equals(t.getColumn(j,true))){
                     res.removeCol(i);
                 }
             }
@@ -333,19 +495,47 @@ public class Table
         return res;
     }
 
+    /**
+    * Ordena as linhas da Tabela (ascendente)
+    */
     public void sort()
     {
+        assert table != null;
         for(int i = 0; i < numRows(); i++)
             Collections.sort(getRow(i));
     }
 
+    /**
+    * Ordena as linhas da Tabela (descendente)
+    */
+    public void sortDesc()
+    {
+        assert table != null;
+        for(int i = 0; i < numRows(); i++){
+            Collections.sort(getRow(i));
+            Collections.reverse(getRow(i));
+        }
+    }
+
+    /**
+    * Verifica se duas tabelas são iguais
+    * @param t Tabela a ser comparada
+    * @return Resultado (verdadeiro/falso)
+    */
     public boolean isEqual(Table t)
     {
+        assert t != null;
         return table.containsAll(t.table);
     }
 
+    /**
+    * Exporta a tabela para um ficheiro CSV a ser criado
+    * na pasta onde está este ficheiro
+    * @param filename Nome do ficheiro CSV
+    */
     public void export(String filename)
     {
+        assert filename.length() > 0;
         PrintWriter pw = null;
         try{
             pw = new PrintWriter(new File(filename + ".csv"));
@@ -367,6 +557,9 @@ public class Table
         pw.close();
     }
 
+    /**
+    * Imprime a tabela
+    */
     public void printTable()
     {
         for(int i = 0; i < numRows(); i++){
@@ -374,7 +567,10 @@ public class Table
         }
     }
 
-    /* Imprime as primeiras x linhas */
+    /**
+    * Imprime as primeiras "n" linhas
+    * @param num Número de linhas
+    */
     public void head(int num)
     {
         assert num > 0 && num < numRows();
@@ -383,12 +579,101 @@ public class Table
         }
     }
 
-    /* Imprime as ultimas x linhas */
+    /**
+    * Imprime as últimas "n" linhas
+    * @param num Número de linhas
+    */
     public void tail(int num)
     {
         assert num >= 0 && num < numRows();
         for(int i = num; i < numRows(); i++){
             System.out.println(getRow(i));
         }
+    }
+
+    /**
+    * Obtém o valor máximo de uma lista (linha / coluna)
+    * @param list Lista
+    * @return O valor máximo da lista
+    */
+    public Double max(List<String> list)
+    {
+        assert list.size() > 0;
+        Double aux, max;
+        try {
+            max = Double.parseDouble(list.get(1));
+            for(int i = 1; i < list.size(); i++){
+                aux = Double.parseDouble(list.get(i));
+                max = aux > max ? aux : max;
+            }
+        }
+        catch (NumberFormatException e){
+            return null;
+        }
+        return max;
+    }
+
+    /**
+    * Obtém o valor mínimo de uma lista (linha / coluna)
+    * @param list Lista
+    * @return O valor mínimo da lista
+    */
+    public Double min(List<String> list)
+    {
+        assert list.size() > 0;
+        Double aux, min;
+        try {
+            min = Double.parseDouble(list.get(1));
+            for(int i = 1; i < list.size(); i++){
+                aux = Double.parseDouble(list.get(i));
+                min = aux < min ? aux : min;
+            }
+        }
+        catch (NumberFormatException e){
+            return null;
+        }
+        return min;
+    }
+
+    /**
+    * Obtém o valor da soma de uma lista (linha / coluna)
+    * @param list Lista
+    * @return O valor da soma da lista
+    */
+    public Double sum(List<String> list)
+    {
+        assert list.size() > 0;
+        Double sum = 0.0;
+        try {
+            for(int i = 0; i < list.size(); i++){
+                sum += Double.parseDouble(list.get(i));
+            }
+        }
+        catch (NumberFormatException e){
+            return null;
+        }
+        return sum;
+    }
+
+    /**
+    * Obtém o valor da média de uma lista (linha / coluna)
+    * @param list Lista
+    * @return O valor da média da lista
+    */
+    public Double avg(List<String> list)
+    {
+        assert list.size() > 0;
+        Double sum = 0.0;
+        int aux = 0;
+        try {
+            for(int i = 0; i < list.size(); i++){
+                sum += Double.parseDouble(list.get(i));
+                aux++;
+            }
+        }
+        catch (NumberFormatException e){
+            return null;
+        }
+        return sum/aux;
     }
 }
