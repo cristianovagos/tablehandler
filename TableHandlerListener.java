@@ -171,6 +171,336 @@ public interface TableHandlerListener extends ParseTreeListener {
 	 */
 	void exitTableExpr(TableHandlerParser.TableExprContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link TableHandlerParser#newTable}.
+	 * @param ctx the parse tree
+	 */
+	void enterNewTable(TableHandlerParser.NewTableContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link TableHandlerParser#newTable}.
+	 * @param ctx the parse tree
+	 */
+	void exitNewTable(TableHandlerParser.NewTableContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link TableHandlerParser#addRow}.
+	 * @param ctx the parse tree
+	 */
+	void enterAddRow(TableHandlerParser.AddRowContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link TableHandlerParser#addRow}.
+	 * @param ctx the parse tree
+	 */
+	void exitAddRow(TableHandlerParser.AddRowContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link TableHandlerParser#addRowFrom}.
+	 * @param ctx the parse tree
+	 */
+	void enterAddRowFrom(TableHandlerParser.AddRowFromContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link TableHandlerParser#addRowFrom}.
+	 * @param ctx the parse tree
+	 */
+	void exitAddRowFrom(TableHandlerParser.AddRowFromContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link TableHandlerParser#remRow}.
+	 * @param ctx the parse tree
+	 */
+	void enterRemRow(TableHandlerParser.RemRowContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link TableHandlerParser#remRow}.
+	 * @param ctx the parse tree
+	 */
+	void exitRemRow(TableHandlerParser.RemRowContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link TableHandlerParser#getValue}.
+	 * @param ctx the parse tree
+	 */
+	void enterGetValue(TableHandlerParser.GetValueContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link TableHandlerParser#getValue}.
+	 * @param ctx the parse tree
+	 */
+	void exitGetValue(TableHandlerParser.GetValueContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link TableHandlerParser#setValue}.
+	 * @param ctx the parse tree
+	 */
+	void enterSetValue(TableHandlerParser.SetValueContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link TableHandlerParser#setValue}.
+	 * @param ctx the parse tree
+	 */
+	void exitSetValue(TableHandlerParser.SetValueContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link TableHandlerParser#clearRow}.
+	 * @param ctx the parse tree
+	 */
+	void enterClearRow(TableHandlerParser.ClearRowContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link TableHandlerParser#clearRow}.
+	 * @param ctx the parse tree
+	 */
+	void exitClearRow(TableHandlerParser.ClearRowContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link TableHandlerParser#removeRow}.
+	 * @param ctx the parse tree
+	 */
+	void enterRemoveRow(TableHandlerParser.RemoveRowContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link TableHandlerParser#removeRow}.
+	 * @param ctx the parse tree
+	 */
+	void exitRemoveRow(TableHandlerParser.RemoveRowContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link TableHandlerParser#addCol}.
+	 * @param ctx the parse tree
+	 */
+	void enterAddCol(TableHandlerParser.AddColContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link TableHandlerParser#addCol}.
+	 * @param ctx the parse tree
+	 */
+	void exitAddCol(TableHandlerParser.AddColContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link TableHandlerParser#addColFrom}.
+	 * @param ctx the parse tree
+	 */
+	void enterAddColFrom(TableHandlerParser.AddColFromContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link TableHandlerParser#addColFrom}.
+	 * @param ctx the parse tree
+	 */
+	void exitAddColFrom(TableHandlerParser.AddColFromContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link TableHandlerParser#remCol}.
+	 * @param ctx the parse tree
+	 */
+	void enterRemCol(TableHandlerParser.RemColContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link TableHandlerParser#remCol}.
+	 * @param ctx the parse tree
+	 */
+	void exitRemCol(TableHandlerParser.RemColContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link TableHandlerParser#clearField}.
+	 * @param ctx the parse tree
+	 */
+	void enterClearField(TableHandlerParser.ClearFieldContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link TableHandlerParser#clearField}.
+	 * @param ctx the parse tree
+	 */
+	void exitClearField(TableHandlerParser.ClearFieldContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link TableHandlerParser#numColumns}.
+	 * @param ctx the parse tree
+	 */
+	void enterNumColumns(TableHandlerParser.NumColumnsContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link TableHandlerParser#numColumns}.
+	 * @param ctx the parse tree
+	 */
+	void exitNumColumns(TableHandlerParser.NumColumnsContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link TableHandlerParser#numRows}.
+	 * @param ctx the parse tree
+	 */
+	void enterNumRows(TableHandlerParser.NumRowsContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link TableHandlerParser#numRows}.
+	 * @param ctx the parse tree
+	 */
+	void exitNumRows(TableHandlerParser.NumRowsContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link TableHandlerParser#uniqueCol}.
+	 * @param ctx the parse tree
+	 */
+	void enterUniqueCol(TableHandlerParser.UniqueColContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link TableHandlerParser#uniqueCol}.
+	 * @param ctx the parse tree
+	 */
+	void exitUniqueCol(TableHandlerParser.UniqueColContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link TableHandlerParser#getCol}.
+	 * @param ctx the parse tree
+	 */
+	void enterGetCol(TableHandlerParser.GetColContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link TableHandlerParser#getCol}.
+	 * @param ctx the parse tree
+	 */
+	void exitGetCol(TableHandlerParser.GetColContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link TableHandlerParser#getRow}.
+	 * @param ctx the parse tree
+	 */
+	void enterGetRow(TableHandlerParser.GetRowContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link TableHandlerParser#getRow}.
+	 * @param ctx the parse tree
+	 */
+	void exitGetRow(TableHandlerParser.GetRowContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link TableHandlerParser#getHeaderIndex}.
+	 * @param ctx the parse tree
+	 */
+	void enterGetHeaderIndex(TableHandlerParser.GetHeaderIndexContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link TableHandlerParser#getHeaderIndex}.
+	 * @param ctx the parse tree
+	 */
+	void exitGetHeaderIndex(TableHandlerParser.GetHeaderIndexContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link TableHandlerParser#subTableCol}.
+	 * @param ctx the parse tree
+	 */
+	void enterSubTableCol(TableHandlerParser.SubTableColContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link TableHandlerParser#subTableCol}.
+	 * @param ctx the parse tree
+	 */
+	void exitSubTableCol(TableHandlerParser.SubTableColContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link TableHandlerParser#subTableCol2}.
+	 * @param ctx the parse tree
+	 */
+	void enterSubTableCol2(TableHandlerParser.SubTableCol2Context ctx);
+	/**
+	 * Exit a parse tree produced by {@link TableHandlerParser#subTableCol2}.
+	 * @param ctx the parse tree
+	 */
+	void exitSubTableCol2(TableHandlerParser.SubTableCol2Context ctx);
+	/**
+	 * Enter a parse tree produced by {@link TableHandlerParser#subTableRow}.
+	 * @param ctx the parse tree
+	 */
+	void enterSubTableRow(TableHandlerParser.SubTableRowContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link TableHandlerParser#subTableRow}.
+	 * @param ctx the parse tree
+	 */
+	void exitSubTableRow(TableHandlerParser.SubTableRowContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link TableHandlerParser#subTableRow2}.
+	 * @param ctx the parse tree
+	 */
+	void enterSubTableRow2(TableHandlerParser.SubTableRow2Context ctx);
+	/**
+	 * Exit a parse tree produced by {@link TableHandlerParser#subTableRow2}.
+	 * @param ctx the parse tree
+	 */
+	void exitSubTableRow2(TableHandlerParser.SubTableRow2Context ctx);
+	/**
+	 * Enter a parse tree produced by {@link TableHandlerParser#add}.
+	 * @param ctx the parse tree
+	 */
+	void enterAdd(TableHandlerParser.AddContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link TableHandlerParser#add}.
+	 * @param ctx the parse tree
+	 */
+	void exitAdd(TableHandlerParser.AddContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link TableHandlerParser#sub}.
+	 * @param ctx the parse tree
+	 */
+	void enterSub(TableHandlerParser.SubContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link TableHandlerParser#sub}.
+	 * @param ctx the parse tree
+	 */
+	void exitSub(TableHandlerParser.SubContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link TableHandlerParser#sort}.
+	 * @param ctx the parse tree
+	 */
+	void enterSort(TableHandlerParser.SortContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link TableHandlerParser#sort}.
+	 * @param ctx the parse tree
+	 */
+	void exitSort(TableHandlerParser.SortContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link TableHandlerParser#equals}.
+	 * @param ctx the parse tree
+	 */
+	void enterEquals(TableHandlerParser.EqualsContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link TableHandlerParser#equals}.
+	 * @param ctx the parse tree
+	 */
+	void exitEquals(TableHandlerParser.EqualsContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link TableHandlerParser#export}.
+	 * @param ctx the parse tree
+	 */
+	void enterExport(TableHandlerParser.ExportContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link TableHandlerParser#export}.
+	 * @param ctx the parse tree
+	 */
+	void exitExport(TableHandlerParser.ExportContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link TableHandlerParser#printTable}.
+	 * @param ctx the parse tree
+	 */
+	void enterPrintTable(TableHandlerParser.PrintTableContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link TableHandlerParser#printTable}.
+	 * @param ctx the parse tree
+	 */
+	void exitPrintTable(TableHandlerParser.PrintTableContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link TableHandlerParser#printFirst}.
+	 * @param ctx the parse tree
+	 */
+	void enterPrintFirst(TableHandlerParser.PrintFirstContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link TableHandlerParser#printFirst}.
+	 * @param ctx the parse tree
+	 */
+	void exitPrintFirst(TableHandlerParser.PrintFirstContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link TableHandlerParser#printLast}.
+	 * @param ctx the parse tree
+	 */
+	void enterPrintLast(TableHandlerParser.PrintLastContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link TableHandlerParser#printLast}.
+	 * @param ctx the parse tree
+	 */
+	void exitPrintLast(TableHandlerParser.PrintLastContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link TableHandlerParser#row}.
+	 * @param ctx the parse tree
+	 */
+	void enterRow(TableHandlerParser.RowContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link TableHandlerParser#row}.
+	 * @param ctx the parse tree
+	 */
+	void exitRow(TableHandlerParser.RowContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link TableHandlerParser#col}.
+	 * @param ctx the parse tree
+	 */
+	void enterCol(TableHandlerParser.ColContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link TableHandlerParser#col}.
+	 * @param ctx the parse tree
+	 */
+	void exitCol(TableHandlerParser.ColContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link TableHandlerParser#file}.
+	 * @param ctx the parse tree
+	 */
+	void enterFile(TableHandlerParser.FileContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link TableHandlerParser#file}.
+	 * @param ctx the parse tree
+	 */
+	void exitFile(TableHandlerParser.FileContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link TableHandlerParser#stringExpr}.
 	 * @param ctx the parse tree
 	 */
@@ -180,26 +510,6 @@ public interface TableHandlerListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitStringExpr(TableHandlerParser.StringExprContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link TableHandlerParser#filename}.
-	 * @param ctx the parse tree
-	 */
-	void enterFilename(TableHandlerParser.FilenameContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link TableHandlerParser#filename}.
-	 * @param ctx the parse tree
-	 */
-	void exitFilename(TableHandlerParser.FilenameContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link TableHandlerParser#open}.
-	 * @param ctx the parse tree
-	 */
-	void enterOpen(TableHandlerParser.OpenContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link TableHandlerParser#open}.
-	 * @param ctx the parse tree
-	 */
-	void exitOpen(TableHandlerParser.OpenContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link TableHandlerParser#dataType}.
 	 * @param ctx the parse tree
