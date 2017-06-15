@@ -165,7 +165,8 @@ public class Table
             }
         }
         catch (IOException e){
-            e.printStackTrace();
+            System.err.println("ERROR: Unable to read the file you provided (maybe doesn't exist):\n" + path);
+            System.exit(0);
         }
         return table;
     }
@@ -710,7 +711,8 @@ public class Table
             pw = new PrintWriter(new File(filename + ".csv"));
         }
         catch(FileNotFoundException e){
-            e.printStackTrace();
+            System.err.println("ERROR: Unable to create file " + filename + ".csv");
+            System.exit(0);
         }
         StringBuilder sb = new StringBuilder();
         for(int i = 0; i < numRows(); i++){
