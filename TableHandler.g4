@@ -1,4 +1,4 @@
-grammar TableHandler;
+ grammar TableHandler;
 
 /*
  *----------------
@@ -19,9 +19,7 @@ stat: declaration   DELIMITER
 declaration: t=dataType var=ID ('=' v=expr)?;
 
 // Variable assignment
-assignment: var=ID '=' e=expr  #assignExpr
-    |       var=ID '=' NULL    #assignNull
-    ;
+assignment: var=ID '=' e=expr;
 
 // Print expression to console
 print: 'print' e1=expr;
@@ -43,11 +41,10 @@ expr: n=numExpr
     ;
 
 // TODO: var/table ops
-numExpr: e1=numExpr op=('+'|'-') e2=numExpr #SumSub
-    |    e1=numExpr op=('*'|'/') e2=numExpr #MulDiv
-    |    '(' e1=numExpr ')'                 #Par
-    |    e3=INTEGER                         #Int
-    |    v=ID                               #Var
+numExpr: e1=numExpr op=('+'|'-'|'*'|'/') e2=numExpr     #Arithm
+    |    '(' e1=numExpr ')'                             #Par
+    |    e3=INTEGER                                     #Int
+    |    v=ID                                           #Var
     ;
 
 boolExpr: e1=boolExpr op=('||'|'&&') e2=boolExpr
@@ -95,40 +92,39 @@ tableExpr: 'table('
     )      ')'
     ;
 
-newTable: 'read' file 'to' ID;
-addRow: 'add row ' (ID|row) 'to' ID;
-addRowFrom: 'add row ' (ID|row) 'at' INTEGER 'to' ID;
-remRow: 'remove row at' INTEGER 'from' ID;
-getValue: 'get value(' INTEGER ',' INTEGER ') from' ID;
-setValue: 'insert into' ID 'value=' s1=expr 'at cell(' INTEGER ',' INTEGER ')';
-clearRow: 'clear row at' INTEGER 'from' ID;
-removeRow: 'remove row at' INTEGER 'from' ID;
-addCol: 'add column' (ID|col) 'to' ID;
-addColFrom: 'add column' (ID|col) 'at' INTEGER 'to' ID;
-remCol: 'remove column at' INTEGER 'from' ID;
-clearField: 'clear field(' INTEGER ',' INTEGER ')' 'from' ID;
-numColumns: 'get col size from' ID; //return int
-numRows: 'get row size from' ID;    //return int
-uniqueCol: 'get unique column from' ID 'at' INTEGER; //return list
-getCol: 'get column from' ID 'at' INTEGER 'header =' b1=boolExpr;
-getRow: 'get row from' ID 'at' INTEGER;
-getHeaderIndex: 'get index from' ID 'of value =' s1=stringExpr; //return int
-subTableCol: 'col-subtable from' ID 'start=' INTEGER 'end=' INTEGER;
-subTableCol2: 'col-subtable from' ID 'start=';
-subTableRow: 'row-subtable from' ID 'start=' INTEGER 'end=' INTEGER;
-subTableRow2: 'row-subtable from' ID 'start=' INTEGER;
-add: 'add' ID 'with' ID;
-sub: 'subtract' ID 'with' ID;
-sort: 'sort' ID;
-equals: ID 'equals' ID; //return boolean
-export: 'export' ID 'to' file;
-printTable: 'print' ID;
-printFirst: 'print first' INTEGER 'lines of' ID;
-printLast: 'print last' INTEGER 'lines of' ID;
+newTable: 'read' f=file 'to' v=ID;
+addRow: 'add row ' r=csvLine 'to' v=ID;
+addRowFrom: 'add row ' r=csvLine 'at' i=INTEGER 'to' v=ID;
+remRow: 'remove row at' i=INTEGER 'from' v=ID;
+getValue: 'get value(' x=INTEGER ',' y=INTEGER ') from' v=ID;
+setValue: 'insert into' v=ID 'value=' s1=expr 'at cell(' x=INTEGER ',' y=INTEGER ')';
+clearRow: 'clear row at' i=INTEGER 'from' v=ID;
+removeRow: 'remove row at' i=INTEGER 'from' v=ID;
+addCol: 'add column' c=csvLine 'to' v=ID;
+addColFrom: 'add column' c=csvLine 'at' i=INTEGER 'to' v=ID;
+remCol: 'remove column at' i=INTEGER 'from' v=ID;
+clearField: 'clear field(' x=INTEGER ',' y=INTEGER ')' 'from' v=ID;
+numColumns: 'get col size from' v=ID; //return int
+numRows: 'get row size from' v=ID;    //return int
+uniqueCol: 'get unique column from' v=ID 'at' i=INTEGER;            //return list****
+getCol: 'get column from' ID 'at' INTEGER 'header =' b1=boolExpr;   //return list****
+getRow: 'get row from' ID 'at' INTEGER;                             //return list
+getHeaderIndex: 'get index from' v=ID 'of value =' s1=stringExpr;    //return int
+subTableCol: 'col-subtable from' v=ID 'start=' s=INTEGER 'end=' e=INTEGER;
+subTableCol2: 'col-subtable from' v=ID 'start=' s=INTEGER;
+subTableRow: 'row-subtable from' v=ID 'start=' s=INTEGER 'end=' e=INTEGER;
+subTableRow2: 'row-subtable from' v=ID 'start=' s=INTEGER;
+add: 'add' v1=ID 'with' v2=ID;
+sub: 'subtract' v1=ID 'with' v2=ID;
+sort: 'sort' v=ID;
+equals: v1=ID 'equals' v2=ID; //return boolean
+export: 'export' v=ID 'to' f=file;
+printTable: 'print' v=ID;
+printFirst: 'print first' i=INTEGER 'lines of' v=ID;
+printLast: 'print last' i=INTEGER 'lines of' v=ID;
 
 //fragments
-row: (ID ','?)+;
-col: (ID ','?)+;
+csvLine: (ID ','?)+;
 file: ID '.csv';
 
 // TODO: Strings as vars
@@ -137,10 +133,9 @@ stringExpr: t1=STRING
     |       NULL 
     ;
 
-dataType: 'integer'
+dataType: 'int'
         | 'table' 
         | 'boolean'
-        | 'char'
         | 'word'
         ;
 

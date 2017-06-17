@@ -51,25 +51,13 @@ public class TableHandlerBaseListener implements TableHandlerListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterAssignExpr(TableHandlerParser.AssignExprContext ctx) { }
+	@Override public void enterAssignment(TableHandlerParser.AssignmentContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitAssignExpr(TableHandlerParser.AssignExprContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterAssignNull(TableHandlerParser.AssignNullContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitAssignNull(TableHandlerParser.AssignNullContext ctx) { }
+	@Override public void exitAssignment(TableHandlerParser.AssignmentContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -159,13 +147,49 @@ public class TableHandlerBaseListener implements TableHandlerListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterNumExpr(TableHandlerParser.NumExprContext ctx) { }
+	@Override public void enterPar(TableHandlerParser.ParContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitNumExpr(TableHandlerParser.NumExprContext ctx) { }
+	@Override public void exitPar(TableHandlerParser.ParContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterArithm(TableHandlerParser.ArithmContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitArithm(TableHandlerParser.ArithmContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterVar(TableHandlerParser.VarContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitVar(TableHandlerParser.VarContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterInt(TableHandlerParser.IntContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitInt(TableHandlerParser.IntContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -567,25 +591,13 @@ public class TableHandlerBaseListener implements TableHandlerListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterRow(TableHandlerParser.RowContext ctx) { }
+	@Override public void enterCsvLine(TableHandlerParser.CsvLineContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitRow(TableHandlerParser.RowContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterCol(TableHandlerParser.ColContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitCol(TableHandlerParser.ColContext ctx) { }
+	@Override public void exitCsvLine(TableHandlerParser.CsvLineContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
