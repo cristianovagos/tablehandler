@@ -49,6 +49,16 @@ public class Table
     {
         this.table = other.table;
     }
+
+    /**
+    * Cria uma Tabela a partir de uma outra Lista já existente.
+    *
+    * @param table Tabela (lista)
+    */
+    public Table(List<List<String>> table)
+    {
+        this.table = table;
+    }
     
     /**
     * Função principal.
