@@ -47,11 +47,10 @@ numExpr: e1=numExpr op=('+'|'-'|'*'|'/') e2=numExpr     #Arithm
     |    v=ID                                           #Var
     ;
 
-boolExpr: e1=boolExpr op=('||'|'&&') e2=boolExpr
-    |     e1=boolExpr op=('=='|'!=') e2=boolExpr
-    |     '(' e1=boolExpr ')'
-    |     BOOLEAN
-    |     v=ID 
+boolExpr: e1=boolExpr op=('||'|'&&'|'=='|'!=') e2=boolExpr  #BoolExprRelOp
+    |     '(' e1=boolExpr ')'                               #BoolPar
+    |     BOOLEAN                                           #Bool
+    |     v=ID                                              #BoolVar
     ;
 
 // TODO: compare vars
@@ -128,9 +127,9 @@ csvLine: (ID ','?)+;
 file: ID '.csv';
 
 // TODO: Strings as vars
-stringExpr: t1=STRING
-    |       '(' t2=stringExpr ')' 
-    |       NULL 
+stringExpr: t1=STRING                           #String
+    |       '(' t2=stringExpr ')'               #StringPar
+    |       NULL                                #StringNull
     ;
 
 dataType: 'int'
