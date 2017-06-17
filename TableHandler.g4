@@ -14,7 +14,7 @@ stat: declaration   DELIMITER
     | condition     DELIMITER
     | tableExpr     DELIMITER
     ;
-//
+
 // Variable declaration
 declaration: t=dataType var=ID ('=' v=expr)?;
 
@@ -38,25 +38,27 @@ expr: n=numExpr
     | b=boolExpr
     | s=stringExpr
     | t=tableExpr
+    | var=ID
     ;
 
-// TODO: var/table ops
-numExpr: e1=numExpr op=('+'|'-'|'*'|'/') e2=numExpr     #Arithm
+// Number expressions
+numExpr: e3=INTEGER                                     #Int
+    |    e1=numExpr op=('+'|'-'|'*'|'/') e2=numExpr     #Arithm
     |    '(' e1=numExpr ')'                             #Par
-    |    e3=INTEGER                                     #Int
-    |    v=ID                                           #Var
+    |    e4=DOUBLE                                      #Double
     ;
 
+// Boolean expressions
 boolExpr: e1=boolExpr op=('||'|'&&'|'=='|'!=') e2=boolExpr  #BoolExprRelOp
     |     '(' e1=boolExpr ')'                               #BoolPar
-    |     BOOLEAN                                           #Bool
+    |     b=BOOLEAN                                         #Bool
     |     v=ID                                              #BoolVar
     ;
 
-// TODO: compare vars
+// Compare expressions
 compareExpr: e1=numExpr op=('=='|'!='|'<'|'>'|'<='|'>=') e2=numExpr;
 
-// TODO: Tables as vars
+// Tables
 tableExpr: 'table(' 
     (      n=newTable
     |      a1=addRow
@@ -91,6 +93,7 @@ tableExpr: 'table('
     )      ')'
     ;
 
+// Table operations base on Table.java
 newTable: 'read' f=file 'to' v=ID;
 addRow: 'add row ' r=csvLine 'to' v=ID;
 addRowFrom: 'add row ' r=csvLine 'at' i=INTEGER 'to' v=ID;
@@ -126,16 +129,17 @@ printLast: 'print last' i=INTEGER 'lines of' v=ID;
 csvLine: (ID ','?)+;
 file: ID '.csv';
 
-// TODO: Strings as vars
+// String expressions
 stringExpr: t1=STRING                           #String
     |       '(' t2=stringExpr ')'               #StringPar
     |       NULL                                #StringNull
     ;
-
+    
 dataType: 'int'
+        | 'double'
         | 'table' 
         | 'boolean'
-        | 'word'
+        | 'string'
         ;
 
 /*
@@ -147,6 +151,7 @@ dataType: 'int'
 NULL: 'null';
 BOOLEAN: ('false' | 'true');
 INTEGER: [0-9]+;
+DOUBLE: [0-9]+'.'[0-9]+;
 ID: [a-zA-Z0-9_]+;
 DELIMITER: ';';
 STRING: ('"' (~'"')* '"');

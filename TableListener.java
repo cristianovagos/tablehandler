@@ -22,7 +22,7 @@ public class TableListener extends TableHandlerBaseListener {
 	}
 
 	public TableListener(){
-		vars = new HashMap<>();
+		vars = new HashMap<String, Variable>();
 	}
 	
 	/*
@@ -36,7 +36,7 @@ public class TableListener extends TableHandlerBaseListener {
 	
 	//@Override public void enterDeclaration(TableHandlerParser.DeclarationContext ctx) {	}
 
-	
+	/*
 	@Override public void exitDeclaration(TableHandlerParser.DeclarationContext ctx) { 
 		String type = ctx.t.getText();
 		String varName = ctx.var.getText();
@@ -48,7 +48,7 @@ public class TableListener extends TableHandlerBaseListener {
 		out.println("Type: " + vars.get(varName).dataType + "\nVar name: " + varName + "\nValue: " + vars.get(varName).value);
 		out.println(vars.get(varName).value.getClass());
 	}
-	/*
+	
 	@Override public void enterAssignExpr(TableHandlerParser.AssignExprContext ctx) { }
 	@Override public void exitAssignExpr(TableHandlerParser.AssignExprContext ctx) { }
 	@Override public void enterAssignNull(TableHandlerParser.AssignNullContext ctx) { }
