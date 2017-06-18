@@ -192,7 +192,7 @@ public class TableVisitor<T> extends TableHandlerBaseVisitor<T> {
         return (T) ctx.INTEGER().getText();
     }
 
-	@Override public T visitBoolExpr(TableHandlerParser.BoolExprContext ctx) { return visitChildren(ctx); }
+	//@Override public T visitBoolExpr(TableHandlerParser.BoolExprContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -620,7 +620,7 @@ public class TableVisitor<T> extends TableHandlerBaseVisitor<T> {
     }
 	
 	
-	@Override public T visitStringExpr(TableHandlerParser.StringExprContext ctx) {
+    @Override public T visitString(TableHandlerParser.StringContext ctx) { 
         return (T) ctx.STRING().getText();
     }
 	
