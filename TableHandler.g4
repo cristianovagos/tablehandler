@@ -85,6 +85,7 @@ tableExpr: 'table('
     |      ad=add
     |      su=sub
     |      sr=sort
+    |      sd=sortDesc
     |      eq=equals
     |      ex=export
     |      pr=printTable
@@ -119,6 +120,7 @@ subTableRow2: 'row-subtable from' v=ID 'start=' s=INTEGER;
 add: 'add' v1=ID 'with' v2=ID;
 sub: 'subtract' v1=ID 'with' v2=ID;
 sort: 'sort' v=ID;
+sortDesc: 'sort descendent' v=ID;
 equals: v1=ID 'equals' v2=ID; //return boolean
 export: 'export' v=ID 'to' f=file;
 printTable: 'print' v=ID;

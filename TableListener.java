@@ -1,14 +1,24 @@
 import static java.lang.System.*;
-import java.util.Map;
-import java.util.HashMap;
-
+import java.util.*;
+import org.stringtemplate.v4.ST;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.ErrorNode;
 import org.antlr.v4.runtime.tree.TerminalNode;
+import org.antlr.v4.runtime.tree.ParseTreeProperty;
 
 public class TableListener extends TableHandlerBaseListener {
     
 	private Map<String, Variable> vars;
+	private ST allCode;
+	private int countVar = 0;
+	private ParseTreeProperty<String> nodeVar = new ParseTreeProperty<>();
+	private ParseTreeProperty<ST> nodeCode = new ParseTreeProperty<>();
+	private List<String> tmp;
+
+	private String newVar() {
+      countVar++;
+      return "v"+countVar;
+   	}
 
 	public class Variable<T>{
 		private String dataType;
@@ -24,124 +34,476 @@ public class TableListener extends TableHandlerBaseListener {
 	public TableListener(){
 		vars = new HashMap<String, Variable>();
 	}
-	
-	/*
-	@Override public void enterMain(TableHandlerParser.MainContext ctx) { }
-	@Override public void exitMain(TableHandlerParser.MainContext ctx) { }
-    */
-	//@Override public void enterStat(TableHandlerParser.StatContext ctx) { }
-    
-	//@Override public void exitStat(TableHandlerParser.StatContext ctx) { }
 
-	
-	//@Override public void enterDeclaration(TableHandlerParser.DeclarationContext ctx) {	}
-
-	/*
-	@Override public void exitDeclaration(TableHandlerParser.DeclarationContext ctx) { 
-		String type = ctx.t.getText();
-		String varName = ctx.var.getText();
-		Integer value = Integer.parseInt(ctx.expr().getText());
-		Variable var = new Variable<>(type, value);
-
-		vars.put(varName, var);
-
-		out.println("Type: " + vars.get(varName).dataType + "\nVar name: " + varName + "\nValue: " + vars.get(varName).value);
-		out.println(vars.get(varName).value.getClass());
+	public String finalCode(String className)
+	{
+		assert className != null && !className.isEmpty();
+		allCode.add("className", className);
+		return allCode.render();
 	}
 	
-	@Override public void enterAssignExpr(TableHandlerParser.AssignExprContext ctx) { }
-	@Override public void exitAssignExpr(TableHandlerParser.AssignExprContext ctx) { }
-	@Override public void enterAssignNull(TableHandlerParser.AssignNullContext ctx) { }
-	@Override public void exitAssignNull(TableHandlerParser.AssignNullContext ctx) { }
-	@Override public void enterPrint(TableHandlerParser.PrintContext ctx) { }
-	@Override public void exitPrint(TableHandlerParser.PrintContext ctx) { }
-	@Override public void enterCondition(TableHandlerParser.ConditionContext ctx) { }
-	@Override public void exitCondition(TableHandlerParser.ConditionContext ctx) { }
-	@Override public void enterIfStatement(TableHandlerParser.IfStatementContext ctx) { }
-	@Override public void exitIfStatement(TableHandlerParser.IfStatementContext ctx) { }
-	@Override public void enterElseIfList(TableHandlerParser.ElseIfListContext ctx) { }
-	@Override public void exitElseIfList(TableHandlerParser.ElseIfListContext ctx) { }
-	@Override public void enterElseStatement(TableHandlerParser.ElseStatementContext ctx) { }
-	@Override public void exitElseStatement(TableHandlerParser.ElseStatementContext ctx) { }
-	@Override public void enterConditionBlock(TableHandlerParser.ConditionBlockContext ctx) { }
-	@Override public void exitConditionBlock(TableHandlerParser.ConditionBlockContext ctx) { }
-	@Override public void enterExpr(TableHandlerParser.ExprContext ctx) { }
-	@Override public void exitExpr(TableHandlerParser.ExprContext ctx) { }
-	@Override public void enterNumExpr(TableHandlerParser.NumExprContext ctx) { }
-	@Override public void exitNumExpr(TableHandlerParser.NumExprContext ctx) { }
-	@Override public void enterBoolExpr(TableHandlerParser.BoolExprContext ctx) { }
-	@Override public void exitBoolExpr(TableHandlerParser.BoolExprContext ctx) { }
-	@Override public void enterCompareExpr(TableHandlerParser.CompareExprContext ctx) { }
-	@Override public void exitCompareExpr(TableHandlerParser.CompareExprContext ctx) { }
-	@Override public void enterTableExpr(TableHandlerParser.TableExprContext ctx) { }
-	@Override public void exitTableExpr(TableHandlerParser.TableExprContext ctx) { }
-	@Override public void enterNewTable(TableHandlerParser.NewTableContext ctx) { }
-	@Override public void exitNewTable(TableHandlerParser.NewTableContext ctx) { }
-	@Override public void enterAddRow(TableHandlerParser.AddRowContext ctx) { }
-	@Override public void exitAddRow(TableHandlerParser.AddRowContext ctx) { }
-	@Override public void enterAddRowFrom(TableHandlerParser.AddRowFromContext ctx) { }
-	@Override public void exitAddRowFrom(TableHandlerParser.AddRowFromContext ctx) { }
-	@Override public void enterRemRow(TableHandlerParser.RemRowContext ctx) { }
-	@Override public void exitRemRow(TableHandlerParser.RemRowContext ctx) { }
-	@Override public void enterGetValue(TableHandlerParser.GetValueContext ctx) { }
-	@Override public void exitGetValue(TableHandlerParser.GetValueContext ctx) { }
-	@Override public void enterSetValue(TableHandlerParser.SetValueContext ctx) { }
-	@Override public void exitSetValue(TableHandlerParser.SetValueContext ctx) { }
-	@Override public void enterClearRow(TableHandlerParser.ClearRowContext ctx) { }
-	@Override public void exitClearRow(TableHandlerParser.ClearRowContext ctx) { }
-	@Override public void enterRemoveRow(TableHandlerParser.RemoveRowContext ctx) { }
-	@Override public void exitRemoveRow(TableHandlerParser.RemoveRowContext ctx) { }
-	@Override public void enterAddCol(TableHandlerParser.AddColContext ctx) { }
-	@Override public void exitAddCol(TableHandlerParser.AddColContext ctx) { }
-	@Override public void enterAddColFrom(TableHandlerParser.AddColFromContext ctx) { }
-	@Override public void exitAddColFrom(TableHandlerParser.AddColFromContext ctx) { }
-	@Override public void enterRemCol(TableHandlerParser.RemColContext ctx) { }
-	@Override public void exitRemCol(TableHandlerParser.RemColContext ctx) { }
-	@Override public void enterClearField(TableHandlerParser.ClearFieldContext ctx) { }
-	@Override public void exitClearField(TableHandlerParser.ClearFieldContext ctx) { }
-	@Override public void enterNumColumns(TableHandlerParser.NumColumnsContext ctx) { }
-	@Override public void exitNumColumns(TableHandlerParser.NumColumnsContext ctx) { }
-	@Override public void enterNumRows(TableHandlerParser.NumRowsContext ctx) { }
-	@Override public void exitNumRows(TableHandlerParser.NumRowsContext ctx) { }
-	@Override public void enterUniqueCol(TableHandlerParser.UniqueColContext ctx) { }
-	@Override public void exitUniqueCol(TableHandlerParser.UniqueColContext ctx) { }
-	@Override public void enterGetCol(TableHandlerParser.GetColContext ctx) { }
-	@Override public void exitGetCol(TableHandlerParser.GetColContext ctx) { }
-	@Override public void enterGetRow(TableHandlerParser.GetRowContext ctx) { }
-	@Override public void exitGetRow(TableHandlerParser.GetRowContext ctx) { }
-	@Override public void enterGetHeaderIndex(TableHandlerParser.GetHeaderIndexContext ctx) { }
-	@Override public void exitGetHeaderIndex(TableHandlerParser.GetHeaderIndexContext ctx) { }
-	@Override public void enterSubTableCol(TableHandlerParser.SubTableColContext ctx) { }
-	@Override public void exitSubTableCol(TableHandlerParser.SubTableColContext ctx) { }
-	@Override public void enterSubTableCol2(TableHandlerParser.SubTableCol2Context ctx) { }
-	@Override public void exitSubTableCol2(TableHandlerParser.SubTableCol2Context ctx) { }
-	@Override public void enterSubTableRow(TableHandlerParser.SubTableRowContext ctx) { }
-	@Override public void exitSubTableRow(TableHandlerParser.SubTableRowContext ctx) { }
-	@Override public void enterSubTableRow2(TableHandlerParser.SubTableRow2Context ctx) { }
-	@Override public void exitSubTableRow2(TableHandlerParser.SubTableRow2Context ctx) { }
-	@Override public void enterAdd(TableHandlerParser.AddContext ctx) { }
-	@Override public void exitAdd(TableHandlerParser.AddContext ctx) { }
-	@Override public void enterSub(TableHandlerParser.SubContext ctx) { }
-	@Override public void exitSub(TableHandlerParser.SubContext ctx) { }
-	@Override public void enterSort(TableHandlerParser.SortContext ctx) { }
-	@Override public void exitSort(TableHandlerParser.SortContext ctx) { }
-	@Override public void enterEquals(TableHandlerParser.EqualsContext ctx) { }
-	@Override public void exitEquals(TableHandlerParser.EqualsContext ctx) { }
-	@Override public void enterExport(TableHandlerParser.ExportContext ctx) { }
-	@Override public void exitExport(TableHandlerParser.ExportContext ctx) { }
-	@Override public void enterRow(TableHandlerParser.RowContext ctx) { }
-	@Override public void exitRow(TableHandlerParser.RowContext ctx) { }
-	@Override public void enterCol(TableHandlerParser.ColContext ctx) { }
-	@Override public void exitCol(TableHandlerParser.ColContext ctx) { }
-	@Override public void enterFile(TableHandlerParser.FileContext ctx) { }
-	@Override public void exitFile(TableHandlerParser.FileContext ctx) { }
-	@Override public void enterStringExpr(TableHandlerParser.StringExprContext ctx) { }
-	@Override public void exitStringExpr(TableHandlerParser.StringExprContext ctx) { }
-	@Override public void enterDataType(TableHandlerParser.DataTypeContext ctx) { }
-	@Override public void exitDataType(TableHandlerParser.DataTypeContext ctx) { }
-	@Override public void enterEveryRule(ParserRuleContext ctx) { }
-	@Override public void exitEveryRule(ParserRuleContext ctx) { }
-	@Override public void visitTerminal(TerminalNode node) { }
-	@Override public void visitErrorNode(ErrorNode node) { }
-    */
+	@Override public void exitMain(TableHandlerParser.MainContext ctx) {
+		allCode = new ST(
+            "public class <className>\n"+
+            "{\n"+
+            "   public static void main(String[] args)\n"+
+            "   {\n"+
+            "<inst>"+
+            "   }\n"+
+            "}\n"
+            );
+		allCode.add("inst", ""); // empty program by default
+		Iterator<TableHandlerParser.StatContext> iter = ctx.stat().iterator();
+		while(iter.hasNext())
+			allCode.add("inst", nodeCode.get(iter.next()).render());
+	}
+
+	@Override public void exitStat(TableHandlerParser.StatContext ctx) {
+		ST st = new ST("<inst>      System.out.println(<stat>);\n");
+		nodeCode.put(ctx, st);
+		st.add("inst", nodeCode.get(ctx));
+		st.add("stat", nodeVar.get(ctx));
+	}
+
+	@Override public void exitDeclaration(TableHandlerParser.DeclarationContext ctx) { 
+		if(ctx.expr().getText() != null)
+		{
+			ST st = new ST("      <datatype> <var> = <value>;\n");
+			st.add("datatype", ctx.dataType().getText());
+			st.add("var", ctx.ID().getText());
+			st.add("value", ctx.expr().getText());
+		}
+		else
+		{
+			ST st = new ST("      <datatype> <var>;\n");
+			st.add("datatype", ctx.dataType().getText());
+			st.add("var", ctx.ID().getText());
+		}
+
+	}
+
+	@Override public void enterCondition(TableHandlerParser.ConditionContext ctx) { 
+		tmp = new ArrayList<>();
+	}
+
+	@Override public void exitAssignment(TableHandlerParser.AssignmentContext ctx) { 
+		ST st = new ST("      <var> = <value>;\n");
+		st.add("var", ctx.ID().getText());
+		st.add("value", ctx.expr().getText());
+		nodeVar.put(ctx, ctx.ID().getText());
+	}
+
+	@Override public void exitPrint(TableHandlerParser.PrintContext ctx) {
+		ST st = new ST("      System.out.println(<var>)");
+		st.add("var", ctx.expr().getText());
+	}
+
+	@Override public void exitIfStatement(TableHandlerParser.IfStatementContext ctx) {
+		ST st = new ST("      if(<bool>){\n<inst>      }\n");
+		st.add("bool", ctx.boolExpr().getText());
+		String instructions = nodeCode.get(ctx.conditionBlock()).render();
+		st.add("inst", instructions);
+		nodeCode.put(ctx, st);
+	}
+
+	@Override public void exitElseIfList(TableHandlerParser.ElseIfListContext ctx) {
+		if(tmp.size() != 0)
+		{
+			ST st = new ST("<elseif>");
+			ST stm = new ST("<stat>");
+			for(int i = tmp.size()-1; i >= 0; i--)
+			{
+				ST eis = new ST("      else if(<bool>) {\n<inst>      }\n");
+				String instructions = nodeCode.get(ctx.conditionBlock()).render();
+				String stat = nodeCode.get(ctx.conditionBlock()).render();
+				eis.add("inst", instructions);
+				eis.add("bool", tmp.get(i));
+				stm.add("stat", stat);
+				st.add("elseif", eis.render());
+			}
+			nodeCode.put(ctx, stm);
+			nodeCode.put(ctx, st);
+		}
+	}
+
+	@Override public void exitElseStatement(TableHandlerParser.ElseStatementContext ctx) { 
+		ST st = new ST("      else{\n<inst>      }\n");
+		String instructions = nodeCode.get(ctx.conditionBlock()).render();
+		st.add("inst", instructions);
+		nodeCode.put(ctx, st);
+	}
+
+	@Override public void exitDataType(TableHandlerParser.DataTypeContext ctx) {
+		String type = "";
+        switch(ctx.getText()){
+        case "int":
+            type = "int";
+            break;
+		case "double":
+			type = "double";
+			break;
+        case "string":
+            type = "String";
+            break;
+        case "table":
+            type = "Table";
+            break;
+        case "boolean":
+            type = "boolean";
+            break;
+        }
+		ST st = new ST("      <datatype>");
+		st.add("datatype", type);
+		nodeCode.put(ctx, st);
+	}
+
+	@Override public void exitArithm(TableHandlerParser.ArithmContext ctx) { 
+		String op = "";
+		switch(ctx.op.getText()) {
+			case "*":
+				op = "*";
+				break;
+			case "/":
+				op = "/";
+				break;
+			case "+":
+				op = "+";
+				break;
+			case "-":
+				op = "-";
+				break;
+		}
+		binaryOperation(ctx, ctx.numExpr(0), op, ctx.numExpr(1));
+	}
+
+	private void binaryOperation(ParserRuleContext ctx, ParserRuleContext e1, String op, ParserRuleContext e2) {
+		ST st = new ST("<inst>      double <var> = <e1> <op> <e2>;\n");
+		String v = newVar();
+		st.add("var", v);
+		st.add("inst", nodeCode.get(e1).render());
+		st.add("inst", nodeCode.get(e2).render());
+		st.add("e1", nodeVar.get(e1));
+		st.add("e2", nodeVar.get(e2));
+		st.add("op", op);
+		nodeVar.put(ctx, v);
+		nodeCode.put(ctx, st);
+	}
+
+	@Override public void exitInt(TableHandlerParser.IntContext ctx) { 
+			ST st = new ST("      double <var> = <value>;\n");
+			String v = newVar();
+			st.add("var", v);
+			st.add("value", ctx.INTEGER().getText());
+			nodeVar.put(ctx, v);
+			nodeCode.put(ctx, st);
+	}
+
+	@Override public void exitPar(TableHandlerParser.ParContext ctx) { 
+			nodeVar.put(ctx, nodeVar.get(ctx.numExpr()));
+			nodeCode.put(ctx, nodeCode.get(ctx.numExpr()));
+	}
+
+	@Override public void exitBoolExprRelOp(TableHandlerParser.BoolExprRelOpContext ctx) {
+			ST st = new ST("      boolean <var> = <var1> <op> <var2>;\n");
+			String v = newVar();
+			st.add("var", v);
+			st.add("var1", nodeVar.get(ctx.boolExpr(0)));
+			st.add("op", ctx.op.getText());
+			st.add("var2", nodeVar.get(ctx.boolExpr(1)));
+			nodeVar.put(ctx, v);
+			nodeCode.put(ctx, st);
+	}
+
+	@Override public void exitBoolPar(TableHandlerParser.BoolParContext ctx) { 
+		nodeVar.put(ctx, nodeVar.get(ctx.boolExpr()));
+		nodeCode.put(ctx, nodeCode.get(ctx.boolExpr()));
+	}
+
+	@Override public void exitBool(TableHandlerParser.BoolContext ctx) { 
+		ST st = new ST("      boolean <var> = <value>;");
+		String v = newVar();
+		st.add("var", v);
+		st.add("value", ctx.BOOLEAN().getText());
+		nodeVar.put(ctx, v);
+		nodeCode.put(ctx, st);
+	}
+
+	@Override public void exitBoolVar(TableHandlerParser.BoolVarContext ctx) { 
+		ST st = new ST("      boolean <var>;");
+		String v = newVar();
+		st.add("var", v);
+		nodeVar.put(ctx, v);
+		nodeCode.put(ctx, st);
+	}
+
+	@Override public void exitCompareExpr(TableHandlerParser.CompareExprContext ctx) {
+		ST st = new ST("      boolean <var> = <var1> <op> <var2>;\n");
+		String v = newVar();
+		st.add("var", v);
+		st.add("var1", ctx.e1.getText());
+		st.add("op", ctx.op.getText());
+		st.add("var2", ctx.e2.getText());
+		nodeVar.put(ctx, v);
+		nodeCode.put(ctx, st);
+	}
+
+	@Override public void exitNewTable(TableHandlerParser.NewTableContext ctx) { 
+		ST st = new ST("      Table <var> = new Table(<file>);\n");
+		String v = newVar();
+		st.add("var", v);
+		st.add("file", ctx.file().getText());
+		nodeVar.put(ctx, v);
+		nodeCode.put(ctx, st);
+	}
+
+	@Override public void exitAddRow(TableHandlerParser.AddRowContext ctx) {
+		ST st = new ST("      <var>.addRow(<line>);\n");
+		st.add("var", nodeVar.get(ctx));
+		st.add("line", ctx.csvLine().getText());
+		nodeCode.put(ctx, st);
+	}
+
+	@Override public void exitAddRowFrom(TableHandlerParser.AddRowFromContext ctx) {
+		ST st = new ST("      <var>.addRow(<index>,<line>);\n");
+		st.add("var", nodeVar.get(ctx));
+		st.add("index", ctx.INTEGER().getText());
+		st.add("line", ctx.csvLine().getText());
+		nodeCode.put(ctx, st);
+	}
+
+	@Override public void exitRemRow(TableHandlerParser.RemRowContext ctx) { 
+		ST st = new ST("      <var>.removeRow(<index>);\n");
+		st.add("var", nodeVar.get(ctx));
+		st.add("index", ctx.INTEGER().getText());
+		nodeCode.put(ctx, st);
+	}
+
+	@Override public void exitGetValue(TableHandlerParser.GetValueContext ctx) { 
+		ST st = new ST("      String <var> = <var1>.getValue(<row>,<col>);\n");
+		String var = newVar();
+		st.add("var", var);
+		st.add("var1", nodeVar.get(ctx));
+		st.add("row", ctx.x.getText());
+		st.add("col", ctx.y.getText());
+		nodeVar.put(ctx, var);
+		nodeCode.put(ctx, st);
+	}
+
+	@Override public void exitClearRow(TableHandlerParser.ClearRowContext ctx) {
+		ST st = new ST("      <var>.clearRow(<index>);\n");
+		st.add("var", nodeVar.get(ctx));
+		st.add("index", ctx.i.getText());
+		nodeCode.put(ctx, st);
+	}
+
+	@Override public void exitRemoveRow(TableHandlerParser.RemoveRowContext ctx) { 
+		ST st = new ST("      <var>.removeRow(<index>);\n");
+		st.add("var", nodeVar.get(ctx));
+		st.add("index", ctx.i.getText());
+		nodeCode.put(ctx, st);
+	}
+
+	@Override public void exitAddCol(TableHandlerParser.AddColContext ctx) {
+		ST st = new ST("      <var>.addCol(<line>);\n");
+		st.add("var", nodeVar.get(ctx));
+		st.add("line", ctx.csvLine().getText());
+		nodeCode.put(ctx, st);
+	}
+
+	@Override public void exitAddColFrom(TableHandlerParser.AddColFromContext ctx) {
+		ST st = new ST("      <var>.addCol(<index>,<line>);\n");
+		st.add("var", nodeVar.get(ctx));
+		st.add("index", ctx.INTEGER().getText());
+		st.add("line", ctx.csvLine().getText());
+		nodeCode.put(ctx, st);
+	}
+
+	@Override public void exitRemCol(TableHandlerParser.RemColContext ctx) {
+		ST st = new ST("      <var>.removeCol(<index>);\n");
+		st.add("var", nodeVar.get(ctx));
+		st.add("index", ctx.i.getText());
+		nodeCode.put(ctx, st);
+	}
+
+	@Override public void exitClearField(TableHandlerParser.ClearFieldContext ctx) {
+		ST st = new ST("      <var>.clearField(<row>,<col>);\n");
+		st.add("var", nodeVar.get(ctx));
+		st.add("row", ctx.x.getText());
+		st.add("col", ctx.y.getText());
+		nodeCode.put(ctx, st);
+	}
+
+	@Override public void exitNumColumns(TableHandlerParser.NumColumnsContext ctx) {
+		ST st = new ST("      int <var> = <var1>.numColumns();\n");
+		String v = newVar();
+		st.add("var", v);
+		st.add("var1", nodeVar.get(ctx));
+		nodeVar.put(ctx, v);
+		nodeCode.put(ctx, st);
+	}
+
+	@Override public void exitNumRows(TableHandlerParser.NumRowsContext ctx) {
+		ST st = new ST("      int <var> = <var1>.numRows();\n");
+		String v = newVar();
+		st.add("var", v);
+		st.add("var1", nodeVar.get(ctx));
+		nodeVar.put(ctx, v);
+		nodeCode.put(ctx, st);
+	}
+
+	@Override public void exitUniqueCol(TableHandlerParser.UniqueColContext ctx) {
+		ST st = new ST("      List<List<String>> <var> = <var1>.getUnique(<index>);\n");
+		String v = newVar();
+		st.add("var", v);
+		st.add("var1", nodeVar.get(ctx));
+		nodeVar.put(ctx, v);
+		nodeCode.put(ctx, st);
+	}
+
+	@Override public void exitGetCol(TableHandlerParser.GetColContext ctx) {
+		ST st = new ST("      List<String> <var> = <var1>.getColumn(<index>,<bool>);\n");
+		String v = newVar();
+		st.add("var", v);
+		st.add("var1", nodeVar.get(ctx));
+		st.add("index", ctx.INTEGER().getText());
+		st.add("bool", ctx.boolExpr().getText());
+		nodeVar.put(ctx, v);
+		nodeCode.put(ctx, st);
+	}
+
+	@Override public void exitGetRow(TableHandlerParser.GetRowContext ctx) {
+		ST st = new ST("      List<String> <var> = <var1>.getRow(<index>);\n");
+		String v = newVar();
+		st.add("var", v);
+		st.add("var1", nodeVar.get(ctx));
+		st.add("index", ctx.INTEGER().getText());
+		nodeVar.put(ctx, v);
+		nodeCode.put(ctx, st);
+	}
+
+	@Override public void exitGetHeaderIndex(TableHandlerParser.GetHeaderIndexContext ctx) {
+		ST st = new ST("      int <var> = <var1>.getHeaderIndex(<string>);\n");
+		String v = newVar();
+		st.add("var", v);
+		st.add("var1", nodeVar.get(ctx));
+		st.add("string", ctx.stringExpr().getText());
+		nodeVar.put(ctx, v);
+		nodeCode.put(ctx, st);
+	}
+
+	@Override public void exitSubTableCol(TableHandlerParser.SubTableColContext ctx) {
+		ST st = new ST("      List<List<String>> <var> = <var1>.subTableCol(<start>,<end>);\n");
+		String v = newVar();
+		st.add("var", v);
+		st.add("var1", nodeVar.get(ctx));
+		st.add("start", ctx.s.getText());
+		st.add("end", ctx.e.getText());
+		nodeVar.put(ctx, v);
+		nodeCode.put(ctx, st);
+	}
+
+	@Override public void exitSubTableCol2(TableHandlerParser.SubTableCol2Context ctx) {
+		ST st = new ST("      List<List<String>> <var> = <var1>.subTableCol(<start>);\n");
+		String v = newVar();
+		st.add("var", v);
+		st.add("var1", nodeVar.get(ctx));
+		st.add("start", ctx.s.getText());
+		nodeVar.put(ctx, v);
+		nodeCode.put(ctx, st);
+	}
+
+	@Override public void exitSubTableRow(TableHandlerParser.SubTableRowContext ctx) { 
+		ST st = new ST("      List<List<String>> <var> = <var1>.subTableRow(<start>,<end>);\n");
+		String v = newVar();
+		st.add("var", v);
+		st.add("var1", nodeVar.get(ctx));
+		st.add("start", ctx.s.getText());
+		st.add("end", ctx.e.getText());
+		nodeVar.put(ctx, v);
+		nodeCode.put(ctx, st);
+	}
+
+	@Override public void exitSubTableRow2(TableHandlerParser.SubTableRow2Context ctx) { 
+		ST st = new ST("      List<List<String>> <var> = <var1>.subTableRow(<start>);\n");
+		String v = newVar();
+		st.add("var", v);
+		st.add("var1", nodeVar.get(ctx));
+		st.add("start", ctx.s.getText());
+		nodeVar.put(ctx, v);
+		nodeCode.put(ctx, st);
+	}
+
+	@Override public void exitAdd(TableHandlerParser.AddContext ctx) {
+		ST st = new ST("      Table <var> = <var1>.addTable(<var2>);\n");
+		String v = newVar();
+		st.add("var", v);
+		st.add("var1", nodeVar.get(ctx.ID(0)));
+		st.add("var2", nodeVar.get(ctx.ID(1)));
+		nodeVar.put(ctx, v);
+		nodeCode.put(ctx, st);
+	}
+
+	@Override public void exitSub(TableHandlerParser.SubContext ctx) {
+		ST st = new ST("      Table <var> = <var1>.subTable(<var2>);\n");
+		String v = newVar();
+		st.add("var", v);
+		st.add("var1", nodeVar.get(ctx.ID(0)));
+		st.add("var2", nodeVar.get(ctx.ID(1)));
+		nodeVar.put(ctx, v);
+		nodeCode.put(ctx, st);
+	}
+
+	@Override public void exitSort(TableHandlerParser.SortContext ctx) {
+		ST st = new ST("      <var>.sort();\n");
+		st.add("var", nodeVar.get(ctx));
+		nodeCode.put(ctx, st);
+	}
+
+	@Override public void exitSortDesc(TableHandlerParser.SortDescContext ctx) {
+		ST st = new ST("      <var>.sortDesc();\n");
+		st.add("var", nodeVar.get(ctx));
+		nodeCode.put(ctx, st);
+	}
+
+	@Override public void exitEquals(TableHandlerParser.EqualsContext ctx) {
+		ST st = new ST("      boolean <var> = <var1>.isEqual(<var2>);\n");
+		String v = newVar();
+		st.add("var", v);
+		st.add("var1", nodeVar.get(ctx.ID(0)));
+		st.add("var2", nodeVar.get(ctx.ID(1)));
+		nodeVar.put(ctx, v);
+		nodeCode.put(ctx, st);
+	}
+
+	@Override public void exitExport(TableHandlerParser.ExportContext ctx) {
+		ST st = new ST("      <var>.export(<file>);\n");
+		st.add("var", nodeVar.get(ctx.ID()));
+		st.add("file", ctx.f.getText());
+		nodeCode.put(ctx, st);
+	}
+
+	@Override public void exitPrintTable(TableHandlerParser.PrintTableContext ctx) {
+		ST st = new ST("      <var>.printTable();\n");
+		st.add("var", nodeVar.get(ctx));
+		nodeCode.put(ctx, st);
+	}
+
+	@Override public void exitPrintFirst(TableHandlerParser.PrintFirstContext ctx) {
+		ST st = new ST("      <var>.head(<index>);\n");
+		st.add("var", nodeVar.get(ctx));
+		st.add("index", ctx.i.getText());
+		nodeCode.put(ctx, st);
+	}
+
+	@Override public void exitPrintLast(TableHandlerParser.PrintLastContext ctx) {
+		ST st = new ST("      <var>.tail(<index>);\n");
+		st.add("var", nodeVar.get(ctx));
+		st.add("index", ctx.i.getText());
+		nodeCode.put(ctx, st);
+	}
+
+	@Override public void exitStringPar(TableHandlerParser.StringParContext ctx) {
+		nodeVar.put(ctx, nodeVar.get(ctx.stringExpr()));
+		nodeCode.put(ctx, nodeCode.get(ctx.stringExpr()));
+	}
 }
