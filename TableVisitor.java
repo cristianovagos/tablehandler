@@ -257,12 +257,12 @@ public class TableVisitor<T> extends TableHandlerBaseVisitor<T> {
             Table tb = (Table) var.getValue();
             int x = Integer.parseInt(ctx.x.getText());
             int y = Integer.parseInt(ctx.y.getText());
-            //return (T) (Object) tb.getValue(x, y);
+            return (T) tb.getValue(x, y);
         } else {
             System.out.println("ERROR: Var not found...");
+            return (T) (Object)res;
         }
         
-        return (T) (Object)res;
     }
 
 	@Override public T visitSetValue(TableHandlerParser.SetValueContext ctx) {
