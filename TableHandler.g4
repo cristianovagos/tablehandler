@@ -1,4 +1,4 @@
- grammar TableHandler;
+grammar TableHandler;
 
 /*
  *----------------
@@ -16,7 +16,7 @@ stat: declaration   DELIMITER
     ;
 
 // Variable declaration
-declaration: t=dataType var=ID ('=' v=expr)?;
+declaration: t=dataType var=ID;
 
 // Variable assignment
 assignment: var=ID '=' e=expr;
@@ -30,7 +30,6 @@ condition: ifStatement elseIfList* elseStatement?;
 ifStatement: 'if' '(' b=boolExpr ')' conditionBlock;
 elseIfList: 'else if' '(' b=boolExpr ')' conditionBlock;
 elseStatement: 'else' conditionBlock;
-
 conditionBlock: '{' stat* '}';
 
 //Expressions
@@ -38,7 +37,6 @@ expr: n=numExpr
     | b=boolExpr
     | s=stringExpr
     | t=tableExpr
-    | var=ID
     ;
 
 // Number expressions
@@ -46,6 +44,7 @@ numExpr: e3=INTEGER                                     #Int
     |    e1=numExpr op=('+'|'-'|'*'|'/') e2=numExpr     #Arithm
     |    '(' e1=numExpr ')'                             #Par
     |    e4=DOUBLE                                      #Double
+    |    v=ID                                           #Var
     ;
 
 // Boolean expressions
@@ -95,20 +94,20 @@ tableExpr: 'table('
     ;
 
 // Table operations base on Table.java
-newTable: 'read' f=file 'to' v=ID;
-addRow: 'add row ' r=csvLine 'to' v=ID;
-addRowFrom: 'add row ' r=csvLine 'at' i=INTEGER 'to' v=ID;
-remRow: 'remove row at' i=INTEGER 'from' v=ID;
-getValue: 'get value(' x=INTEGER ',' y=INTEGER ') from' v=ID;
-setValue: 'insert into' v=ID 'value=' s1=expr 'at cell(' x=INTEGER ',' y=INTEGER ')';
-clearRow: 'clear row at' i=INTEGER 'from' v=ID;
-removeRow: 'remove row at' i=INTEGER 'from' v=ID;
-addCol: 'add column' c=csvLine 'to' v=ID;
-addColFrom: 'add column' c=csvLine 'at' i=INTEGER 'to' v=ID;
+newTable: 'read' f=file 'to' v=ID;      //checked
+addRow: 'add row' r=STRING 'to' v=ID;      //checked
+addRowFrom: 'add row' r=STRING 'at' i=INTEGER 'to' v=ID;    //checked
+remRow: 'remove row at' i=INTEGER 'from' v=ID;  //checked
+getValue: 'get value(' x=INTEGER ',' y=INTEGER ') from' v=ID;   //missing return
+setValue: 'insert into' v=ID 'value=' s1=expr 'at cell(' x=INTEGER ',' y=INTEGER ')';   //checked
+clearRow: 'clear row at' i=INTEGER 'from' v=ID; //checked
+removeRow: 'remove row at' i=INTEGER 'from' v=ID;   //checked
+addCol: 'add column' c=STRING 'to' v=ID;    //checked
+addColFrom: 'add column' c=STRING 'at' i=INTEGER 'to' v=ID; //checked
 remCol: 'remove column at' i=INTEGER 'from' v=ID;
-clearField: 'clear field(' x=INTEGER ',' y=INTEGER ')' 'from' v=ID;
-numColumns: 'get col size from' v=ID; //return int
-numRows: 'get row size from' v=ID;    //return int
+clearField: 'clear field(' x=INTEGER ',' y=INTEGER ') from' v=ID;
+numColumns: 'get col size from' v=ID; //missing return
+numRows: 'get row size from' v=ID;    //missing return
 uniqueCol: 'get unique column from' v=ID 'at' i=INTEGER;            //return list****
 getCol: 'get column from' ID 'at' INTEGER 'header =' b1=boolExpr;   //return list****
 getRow: 'get row from' ID 'at' INTEGER;                             //return list
@@ -121,14 +120,13 @@ add: 'add' v1=ID 'with' v2=ID;
 sub: 'subtract' v1=ID 'with' v2=ID;
 sort: 'sort' v=ID;
 sortDesc: 'sort descendent' v=ID;
-equals: v1=ID 'equals' v2=ID; //return boolean
+equals: v1=ID 'equals' v2=ID;                   //return boolean
 export: 'export' v=ID 'to' f=file;
 printTable: 'print' v=ID;
 printFirst: 'print first' i=INTEGER 'lines of' v=ID;
 printLast: 'print last' i=INTEGER 'lines of' v=ID;
 
 //fragments
-csvLine: (ID ','?)+;
 file: ID '.csv';
 
 // String expressions
@@ -151,7 +149,7 @@ dataType: 'int'
  */
 
 NULL: 'null';
-BOOLEAN: ('false' | 'true');
+BOOLEAN: ('true' | 'false');
 INTEGER: [0-9]+;
 DOUBLE: [0-9]+'.'[0-9]+;
 ID: [a-zA-Z0-9_]+;

@@ -2,6 +2,8 @@ import java.io.IOException;
 import java.util.*;
 import org.antlr.v4.runtime.tree.AbstractParseTreeVisitor;
 
+import jdk.nashorn.internal.codegen.types.Type;
+
 public class TableVisitor<T> extends TableHandlerBaseVisitor<T> {
     private Map<String, Variable> vars = new HashMap<>();
 
@@ -9,101 +11,60 @@ public class TableVisitor<T> extends TableHandlerBaseVisitor<T> {
         String type = ctx.t.getText();
 		String name = ctx.var.getText();
 		T value = null;
-        Table tb;
-        int i;
-        double d;
-
-		try {
-			//value = visitExpr(ctx.v);
-            if(type.equals("int")) {
-                i = Integer.parseInt((String) visitExpr(ctx.v));
-                value = (T)(Object) i;
-                
-            } else if(type.equals("double")) {
-                d = Double.parseDouble((String) visitExpr(ctx.v));
-                value = (T) (Object) d;
-            } else if(type.equals("boolean")) {
-                String bool = (String) visitExpr(ctx.v);
-                if(bool.equals("false") || bool.equals("true")) {
-                    value = visitExpr(ctx.v);
-                } else {
-                    System.out.println("ERROR: not boolean type...");
-                }
-            } else if(type.equals("table")) {
-                tb = (Table) visitExpr(ctx.v);
-                value = (T) tb;
-            } else {
-                value = visitExpr(ctx.v);
-            }
-            Variable var = new Variable(type, value);
-		    vars.put(name, var);
-		} catch(NumberFormatException e) {
-            System.out.println("ERROR: types don't match...");
-			value = null;
-		}
+        Variable var = new Variable<T>(type, value);
+        vars.put(name, var);
 		
-		//System.out.println("Type: " + type + "\nVar name: " + name + "\nValue: " + value);
         return visitChildren(ctx);
     }
 
 	@Override public T visitAssignment(TableHandlerParser.AssignmentContext ctx) {
-        /*
-		String varName = ctx.var.getText();
-		
-		if(vars.containsKey(varName)) {
-			Variable var = vars.get(varName);
-			T value = visitExpr(ctx.e);
-			
-			if(var.getType().equals("int")) {
-				try {
-					var.setValue(Integer.parseInt(value));
-					vars.remove(varName);
-					vars.put(varName, var);
-				} catch(Exception e) {
-					System.out.println("ERROR: must be an int type...");
-				}
-			}
-			else if(var.getType().equals("word")) {
-				var.setValue(value);
-				vars.remove(varName);
-				vars.put(varName, var);
-			} else if(var.getType.equals("boolean")) {
-				if(value.equals("true") || value.equals("false")) {
-					var.setValue(value);
-					vars.remove(varName);
-					vars.put(varName, var);
-				} else {
-					System.out.println("ERROR: must be a boolean type...");
-				}
-			} else if(var.getType.equals("table")) {
-				if(visitExpr(ctx.e).equals("")) {
-					System.out.println("ERROR: must be a table type");
-				} else {
-					var.setValue(value);
-					vars.remove(varName);
-					vars.put(varName, var);
-				}
-			}
-		} else {
-			System.out.println("ERROR: variable not found...");
-		}
-		*/ 
+        if(vars.containsKey(ctx.var.getText())) {
+            Variable var = vars.get(ctx.var.getText());
+            T value = null;
+            int i;
+            double d;
+            Table tb;
+            String str;
+
+            try {
+                if(var.getType().equals("int")) {
+                    value = visitExpr(ctx.e);
+                } else if(var.getType().equals("double")) {
+                    try {
+                        d = Double.parseDouble((String) visitExpr(ctx.e));
+                        value = (T) (Object) d;
+                    } catch(NullPointerException e) {
+                        System.out.println("ERROR: not double type...");
+                    }
+                } else if(var.getType().equals("boolean")) {
+                    String bool = (String) visitExpr(ctx.e);
+                    if(bool.equals("true") || bool.equals("false")) {
+                        value = visitExpr(ctx.e);
+                    } else {
+                        System.out.println("ERROR: not boolean type...");
+                    }
+                } else if(var.getType().equals("string")) {
+                    System.out.println(visit(ctx.e));
+                }
+            } catch(NumberFormatException e) {
+                System.out.println("ERROR: types mismatch...");
+            }
+            var.setValue(value);
+            vars.replace(ctx.var.getText(), var);
+        } else {
+            System.out.println("ERROR: variable not declared...");
+        }
+
         return visitChildren(ctx);
     }
 
 	@Override public T visitPrint(TableHandlerParser.PrintContext ctx) { 
         if(vars.containsKey(ctx.e1.getText())) {
-			Variable x = vars.get(ctx.e1.getText());
-			System.out.println(x.getValue());
+			Variable var = vars.get(ctx.e1.getText());
+            if(var.getValue() != null) System.out.println(var.getValue());
 		} else {
-            /*
-            String str = ctx.e1.getText();
-            if(str.charAt(0) == '\"' && str.charAt(str.length() - 1) == '\"') {
-                System.out.println(str);
-            } else {
-                System.out.println(visitExpr(ctx.e1));
-            }
-            */
+            //if(visitExpr(ctx.e1) == null) System.out.println("ERROR: var not declared...");
+            System.out.println(visitExpr(ctx.e1));
 		}
 		return visitChildren(ctx);
     }
@@ -192,13 +153,22 @@ public class TableVisitor<T> extends TableHandlerBaseVisitor<T> {
         return (T) ctx.INTEGER().getText();
     }
 
-	//@Override public T visitBoolExpr(TableHandlerParser.BoolExprContext ctx) { return visitChildren(ctx); }
+    @Override public T visitBoolExprRelOp(TableHandlerParser.BoolExprRelOpContext ctx) { return visitChildren(ctx); }
+
+	@Override public T visitBoolPar(TableHandlerParser.BoolParContext ctx) { return visitChildren(ctx); }
+
+	@Override public T visitBool(TableHandlerParser.BoolContext ctx) {
+        return (T) ctx.BOOLEAN().getText();
+    }
+
+	@Override public T visitBoolVar(TableHandlerParser.BoolVarContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
+
 	@Override public T visitCompareExpr(TableHandlerParser.CompareExprContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
@@ -206,17 +176,18 @@ public class TableVisitor<T> extends TableHandlerBaseVisitor<T> {
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitTableExpr(TableHandlerParser.TableExprContext ctx) { return visitChildren(ctx); }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation returns the result of calling
-	 * {@link #visitChildren} on {@code ctx}.</p>
-	 */
+	@Override public T visitTableExpr(TableHandlerParser.TableExprContext ctx) {
+        return visitChildren(ctx);
+    }
+
 	@Override public T visitNewTable(TableHandlerParser.NewTableContext ctx) {
-        Table tb = new Table(ctx.f.getText());
-        Variable var = new Variable<T>("table", (T) tb);
-        vars.put(ctx.v.getText(), var);
+        if(vars.containsKey(ctx.v.getText())) {
+            Table tb = new Table(ctx.f.getText());
+            Variable var = new Variable<T>("table", (T) tb);
+            vars.replace(ctx.v.getText(), var);
+        } else {
+            System.out.println("ERROR: variable not declared...");
+        }
         return visitChildren(ctx);
     }
 
@@ -224,7 +195,14 @@ public class TableVisitor<T> extends TableHandlerBaseVisitor<T> {
         if(vars.containsKey(ctx.v.getText())) {
             Variable var = vars.get(ctx.v.getText());
             Table tb = (Table) var.getValue();
-            List<String> items = Arrays.asList(ctx.r.getText().split("\\s*,\\s*"));
+            String csv = ctx.r.getText();
+            csv = csv.substring(1, csv.length() - 1);
+            System.out.println(csv);
+            String[] parts = csv.split(",");
+            List<String> items = new ArrayList<>();
+            for(int i = 0; i < parts.length; i++) {
+                items.add(parts[i]);
+            }
             tb.addRow(items);
             var.setValue(tb);
             vars.replace(ctx.v.getText(), var);
@@ -237,7 +215,16 @@ public class TableVisitor<T> extends TableHandlerBaseVisitor<T> {
         if(vars.containsKey(ctx.v.getText())) {
             Variable var = vars.get(ctx.v.getText());
             Table tb = (Table) var.getValue();
-            List<String> items = Arrays.asList(ctx.r.getText().split("\\s*,\\s*"));
+            String csv = ctx.r.getText();
+            csv = csv.substring(1, csv.length() - 1);
+            System.out.println(csv);
+            String[] parts = csv.split(",");
+            List<String> items = new ArrayList<>();
+
+            for(int i = 0; i < parts.length; i++) {
+                items.add(parts[i]);
+            }
+            
             int idx = Integer.parseInt(ctx.i.getText());
             tb.addRow(idx, items);
             var.setValue(tb);
@@ -264,18 +251,18 @@ public class TableVisitor<T> extends TableHandlerBaseVisitor<T> {
     }
 
 	@Override public T visitGetValue(TableHandlerParser.GetValueContext ctx) {
-        String res = null;
+        String res = "";
         if(vars.containsKey(ctx.v.getText())) {
             Variable var = vars.get(ctx.v.getText());
             Table tb = (Table) var.getValue();
             int x = Integer.parseInt(ctx.x.getText());
             int y = Integer.parseInt(ctx.y.getText());
-            res = tb.getValue(x, y);
+            //return (T) (Object) tb.getValue(x, y);
         } else {
             System.out.println("ERROR: Var not found...");
         }
         
-        return (T)(Object) res;
+        return (T) (Object)res;
     }
 
 	@Override public T visitSetValue(TableHandlerParser.SetValueContext ctx) {
@@ -328,7 +315,14 @@ public class TableVisitor<T> extends TableHandlerBaseVisitor<T> {
         if(vars.containsKey(ctx.v.getText())) {
             Variable var = vars.get(ctx.v.getText());
             Table tb = (Table) var.getValue();
-            List<String> items = Arrays.asList(ctx.c.getText().split("\\s*,\\s*"));
+            String csv = ctx.c.getText();
+            csv = csv.substring(1, csv.length() - 1);
+            System.out.println(csv);
+            String[] parts = csv.split(",");
+            List<String> items = new ArrayList<>();
+            for(int i = 0; i < parts.length; i++) {
+                items.add(parts[i]);
+            }
             tb.addCol(items);
             var.setValue(tb);
             vars.replace(ctx.v.getText(), var);
@@ -342,7 +336,16 @@ public class TableVisitor<T> extends TableHandlerBaseVisitor<T> {
         if(vars.containsKey(ctx.v.getText())) {
             Variable var = vars.get(ctx.v.getText());
             Table tb = (Table) var.getValue();
-            List<String> items = Arrays.asList(ctx.c.getText().split("\\s*,\\s*"));
+            String csv = ctx.c.getText();
+            csv = csv.substring(1, csv.length() - 1);
+            System.out.println(csv);
+            String[] parts = csv.split(",");
+            List<String> items = new ArrayList<>();
+
+            for(int i = 0; i < parts.length; i++) {
+                items.add(parts[i]);
+            }
+            
             int idx = Integer.parseInt(ctx.i.getText());
             tb.addCol(idx, items);
             var.setValue(tb);
@@ -386,17 +389,18 @@ public class TableVisitor<T> extends TableHandlerBaseVisitor<T> {
     }
 
 	@Override public T visitNumColumns(TableHandlerParser.NumColumnsContext ctx) {
-        int res = -1;
+        T res = null;
 
         if(vars.containsKey(ctx.v.getText())) {
             Variable var = vars.get(ctx.v.getText());
             Table tb = (Table) var.getValue();
-            res = tb.numColumns();
+            res = (T) (Object) tb.numColumns();
         } else {
             System.out.println("ERROR: Var not found...");
         }
+
         
-        return (T)(Object) res;
+        return res;
     }
 
 	@Override public T visitNumRows(TableHandlerParser.NumRowsContext ctx) {
