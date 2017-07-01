@@ -238,6 +238,14 @@ public class Table
         table.add(l);
     }
 
+    public void addRow(String csv)
+    {
+        List<String> l = Arrays.asList(csv.split(","));
+        assert l.size() > 0 && l.size() <= numColumns();
+        
+        table.add(l);
+    }
+
     /**
     * Adiciona uma linha no índice da linha dado, 
     * dado uma lista com o conteúdo a ser guardado.
@@ -253,6 +261,15 @@ public class Table
     */
     public void addRow(int idx, List<String> l)
     {
+        assert l.size() > 0 && l.size() <= numColumns();
+        assert idx > 0 && idx < numRows();
+        
+        table.add(idx, l);
+    }
+
+    public void addRow(int idx, String csv)
+    {
+        List<String> l = Arrays.asList(csv.split(","));
         assert l.size() > 0 && l.size() <= numColumns();
         assert idx > 0 && idx < numRows();
         
@@ -316,6 +333,23 @@ public class Table
         }
     }
 
+    public void addCol(String csv)
+    {
+        List<String> l = Arrays.asList(csv.split(","));
+        assert l.size() > 0;
+
+        for(int i = 0; i < numRows(); i++){
+            List<String> tmp = new ArrayList<>(table.get(i));
+            if(i < l.size())
+                tmp.add(l.get(i));
+            else
+                tmp.add("");
+            table.set(i, tmp);
+        }
+    }
+
+    
+
     /**
     * Adiciona uma coluna no índice da coluna dado, 
     * dado uma lista com o conteúdo a ser guardado.
@@ -330,6 +364,21 @@ public class Table
     */
     public void addCol(int idx, List<String> l)
     {
+        assert idx >= 0 && idx < numColumns();
+        
+        for(int i = 0; i < numRows(); i++){
+            List<String> tmp = new ArrayList<>(table.get(i));
+            if(i < l.size())
+                tmp.add(idx, l.get(i));
+            else
+                tmp.add(idx, "");
+            table.set(i, tmp);
+        }
+    }
+
+    public void addCol(int idx, String csv)
+    {
+        List<String> l = Arrays.asList(csv.split(","));
         assert idx >= 0 && idx < numColumns();
         
         for(int i = 0; i < numRows(); i++){
@@ -794,8 +843,9 @@ public class Table
     * @param list Lista
     * @return O valor máximo da lista
     */
-    public Double max(List<String> list)
+    public Double max(String csv)
     {
+        List<String> l = Arrays.asList(csv.split(","));
         assert list.size() > 0;
 
         Double aux, max;
@@ -822,8 +872,9 @@ public class Table
     * @param list Lista
     * @return O valor mínimo da lista
     */
-    public Double min(List<String> list)
+    public Double min(String csv)
     {
+        List<String> l = Arrays.asList(csv.split(","));
         assert list.size() > 0;
 
         Double aux, min;
@@ -850,8 +901,9 @@ public class Table
     * @param list Lista
     * @return O valor da soma da lista
     */
-    public Double sum(List<String> list)
+    public Double sum(String csv)
     {
+        List<String> l = Arrays.asList(csv.split(","));
         assert list.size() > 0;
 
         Double sum = 0.0;
@@ -876,8 +928,9 @@ public class Table
     * @param list Lista
     * @return O valor da média da lista
     */
-    public Double avg(List<String> list)
+    public Double avg(String csv)
     {
+        List<String> l = Arrays.asList(csv.split(","));
         assert list.size() > 0;
 
         Double sum = 0.0;
