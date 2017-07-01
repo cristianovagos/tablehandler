@@ -174,7 +174,7 @@ public class Compiler extends TableHandlerBaseListener {
 			Variable var = vars.get(ctx.ID().getText());
 			if(var.getType().equals("table")) {
 				tmp.add("var", ctx.ID().getText());
-				tmp.add("file", ctx.file().getText());
+				tmp.add("file", "\"" + ctx.file().getText() + "\"");
 				main.add("stat", tmp.render());
 			} else {
 				System.err.println("ERROR: variable \"" + ctx.ID().getText() + "\" not table type...");
@@ -600,7 +600,7 @@ public class Compiler extends TableHandlerBaseListener {
 			Variable var = vars.get(ctx.ID().getText());
 			if(var.getType().equals("table")) {
 				tmp.add("var", ctx.ID().getText());
-				tmp.add("file", ctx.file().getText());
+				tmp.add("file", "\"" + ctx.file().getText() + "\"");
 				main.add("stat", tmp.render());
 			} else {
 				System.err.println("ERROR: variable \"" + ctx.ID().getText() + "\" not table type...");

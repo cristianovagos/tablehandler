@@ -1,0 +1,11 @@
+#!/bin/bash
+
+echo 'Building TableHandler...'
+echo -ne '#####                     (33%)\r'
+sleep 0.2
+antlr4 TableHandler.g4 -listener -visitor
+echo -ne '#############             (66%)\r'
+sleep 0.3
+javac *.java
+echo -ne '#######################   (100%)\r'
+echo -ne '\n'

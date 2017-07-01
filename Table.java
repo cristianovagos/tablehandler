@@ -104,7 +104,7 @@ public class Table
         System.out.println("\n(Tabela t2 + tbl)");
         printTable(t2.addTable(tbl));*/
 
-        Table t1 = new Table("/home/cristiano/Área de Trabalho/LFA/Pratica/proj/csvtable/CSV/csv1.csv");
+        /*Table t1 = new Table("/home/cristiano/Área de Trabalho/LFA/Pratica/proj/csvtable/CSV/csv1.csv");
         Table t2 = new Table("/home/cristiano/Área de Trabalho/LFA/Pratica/proj/csvtable/CSV/csv2.csv");
         
         System.out.println("\n(Tabela t1)");
@@ -144,7 +144,7 @@ public class Table
 
         System.out.println("\nTabela t1 ordenada descendente");
         tAux.sortDesc();
-        tAux.printTable();
+        tAux.printTable();*/
     }
 
     /**
@@ -840,12 +840,12 @@ public class Table
     *    <dd>{@code list.size() > 0}</dd>
     * </dl></p>
     *
-    * @param list Lista
+    * @param csv String
     * @return O valor máximo da lista
     */
     public Double max(String csv)
     {
-        List<String> l = Arrays.asList(csv.split(","));
+        List<String> list = Arrays.asList(csv.split(","));
         assert list.size() > 0;
 
         Double aux, max;
@@ -869,12 +869,12 @@ public class Table
     *    <dd>{@code list.size() > 0}</dd>
     * </dl></p>
     *
-    * @param list Lista
+    * @param csv String
     * @return O valor mínimo da lista
     */
     public Double min(String csv)
     {
-        List<String> l = Arrays.asList(csv.split(","));
+        List<String> list = Arrays.asList(csv.split(","));
         assert list.size() > 0;
 
         Double aux, min;
@@ -898,12 +898,12 @@ public class Table
     *    <dd>{@code list.size() > 0}</dd>
     * </dl></p>
     *
-    * @param list Lista
+    * @param csv String
     * @return O valor da soma da lista
     */
     public Double sum(String csv)
     {
-        List<String> l = Arrays.asList(csv.split(","));
+        List<String> list = Arrays.asList(csv.split(","));
         assert list.size() > 0;
 
         Double sum = 0.0;
@@ -925,12 +925,12 @@ public class Table
     *    <dd>{@code list.size() > 0}</dd>
     * </dl></p>
     *
-    * @param list Lista
+    * @param csv String
     * @return O valor da média da lista
     */
     public Double avg(String csv)
     {
-        List<String> l = Arrays.asList(csv.split(","));
+        List<String> list = Arrays.asList(csv.split(","));
         assert list.size() > 0;
 
         Double sum = 0.0;
