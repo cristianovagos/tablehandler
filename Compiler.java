@@ -3,6 +3,7 @@ import org.antlr.v4.runtime.tree.*;
 import org.antlr.v4.runtime.*; 
 import org.stringtemplate.v4.*;
 import java.util.*;
+import java.io.*;
 
 public class Compiler extends TableHandlerBaseListener {
 	
@@ -22,7 +23,7 @@ public class Compiler extends TableHandlerBaseListener {
 	@Override public void enterMain(TableHandlerParser.MainContext ctx) {
 		group = new STGroupFile("templates.stg");
 		main = group.getInstanceOf("main");
-		main.add("className","TableCompiler");
+		main.add("className","TableOutput");
 	}
 
 	@Override public void exitMain(TableHandlerParser.MainContext ctx) {

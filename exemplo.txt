@@ -19,12 +19,3 @@ table(print tabela);
 table(remove row at 2 from tabela);
 table(print tabela);
 
-if(dummy > 2) {
-   print str;
-   int count;
-   count = 2+2;
-} else if(count < 5) {
-   print "Paulo";
-} else {
-   print dummy;
-}

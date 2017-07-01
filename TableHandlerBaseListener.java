@@ -63,13 +63,25 @@ public class TableHandlerBaseListener implements TableHandlerListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterPrint(TableHandlerParser.PrintContext ctx) { }
+	@Override public void enterPrintVar(TableHandlerParser.PrintVarContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitPrint(TableHandlerParser.PrintContext ctx) { }
+	@Override public void exitPrintVar(TableHandlerParser.PrintVarContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterPrintExpr(TableHandlerParser.PrintExprContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitPrintExpr(TableHandlerParser.PrintExprContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -183,6 +195,18 @@ public class TableHandlerBaseListener implements TableHandlerListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterDouble(TableHandlerParser.DoubleContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitDouble(TableHandlerParser.DoubleContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterInt(TableHandlerParser.IntContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -262,18 +286,6 @@ public class TableHandlerBaseListener implements TableHandlerListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitAddRowFrom(TableHandlerParser.AddRowFromContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterRemRow(TableHandlerParser.RemRowContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitRemRow(TableHandlerParser.RemRowContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -531,6 +543,18 @@ public class TableHandlerBaseListener implements TableHandlerListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterSortDesc(TableHandlerParser.SortDescContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitSortDesc(TableHandlerParser.SortDescContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterEquals(TableHandlerParser.EqualsContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -591,30 +615,6 @@ public class TableHandlerBaseListener implements TableHandlerListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterCsvLine(TableHandlerParser.CsvLineContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitCsvLine(TableHandlerParser.CsvLineContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterFile(TableHandlerParser.FileContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitFile(TableHandlerParser.FileContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
 	@Override public void enterStringExpr(TableHandlerParser.StringExprContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -634,6 +634,18 @@ public class TableHandlerBaseListener implements TableHandlerListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitDataType(TableHandlerParser.DataTypeContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterFile(TableHandlerParser.FileContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitFile(TableHandlerParser.FileContext ctx) { }
 
 	/**
 	 * {@inheritDoc}

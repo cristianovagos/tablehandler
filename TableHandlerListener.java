@@ -47,15 +47,29 @@ public interface TableHandlerListener extends ParseTreeListener {
 	 */
 	void exitAssignment(TableHandlerParser.AssignmentContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link TableHandlerParser#print}.
+	 * Enter a parse tree produced by the {@code printVar}
+	 * labeled alternative in {@link TableHandlerParser#print}.
 	 * @param ctx the parse tree
 	 */
-	void enterPrint(TableHandlerParser.PrintContext ctx);
+	void enterPrintVar(TableHandlerParser.PrintVarContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link TableHandlerParser#print}.
+	 * Exit a parse tree produced by the {@code printVar}
+	 * labeled alternative in {@link TableHandlerParser#print}.
 	 * @param ctx the parse tree
 	 */
-	void exitPrint(TableHandlerParser.PrintContext ctx);
+	void exitPrintVar(TableHandlerParser.PrintVarContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code printExpr}
+	 * labeled alternative in {@link TableHandlerParser#print}.
+	 * @param ctx the parse tree
+	 */
+	void enterPrintExpr(TableHandlerParser.PrintExprContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code printExpr}
+	 * labeled alternative in {@link TableHandlerParser#print}.
+	 * @param ctx the parse tree
+	 */
+	void exitPrintExpr(TableHandlerParser.PrintExprContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link TableHandlerParser#condition}.
 	 * @param ctx the parse tree
@@ -153,6 +167,18 @@ public interface TableHandlerListener extends ParseTreeListener {
 	 */
 	void exitVar(TableHandlerParser.VarContext ctx);
 	/**
+	 * Enter a parse tree produced by the {@code Double}
+	 * labeled alternative in {@link TableHandlerParser#numExpr}.
+	 * @param ctx the parse tree
+	 */
+	void enterDouble(TableHandlerParser.DoubleContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code Double}
+	 * labeled alternative in {@link TableHandlerParser#numExpr}.
+	 * @param ctx the parse tree
+	 */
+	void exitDouble(TableHandlerParser.DoubleContext ctx);
+	/**
 	 * Enter a parse tree produced by the {@code Int}
 	 * labeled alternative in {@link TableHandlerParser#numExpr}.
 	 * @param ctx the parse tree
@@ -224,16 +250,6 @@ public interface TableHandlerListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitAddRowFrom(TableHandlerParser.AddRowFromContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link TableHandlerParser#remRow}.
-	 * @param ctx the parse tree
-	 */
-	void enterRemRow(TableHandlerParser.RemRowContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link TableHandlerParser#remRow}.
-	 * @param ctx the parse tree
-	 */
-	void exitRemRow(TableHandlerParser.RemRowContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link TableHandlerParser#getValue}.
 	 * @param ctx the parse tree
@@ -445,6 +461,16 @@ public interface TableHandlerListener extends ParseTreeListener {
 	 */
 	void exitSort(TableHandlerParser.SortContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link TableHandlerParser#sortDesc}.
+	 * @param ctx the parse tree
+	 */
+	void enterSortDesc(TableHandlerParser.SortDescContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link TableHandlerParser#sortDesc}.
+	 * @param ctx the parse tree
+	 */
+	void exitSortDesc(TableHandlerParser.SortDescContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link TableHandlerParser#equals}.
 	 * @param ctx the parse tree
 	 */
@@ -495,26 +521,6 @@ public interface TableHandlerListener extends ParseTreeListener {
 	 */
 	void exitPrintLast(TableHandlerParser.PrintLastContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link TableHandlerParser#csvLine}.
-	 * @param ctx the parse tree
-	 */
-	void enterCsvLine(TableHandlerParser.CsvLineContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link TableHandlerParser#csvLine}.
-	 * @param ctx the parse tree
-	 */
-	void exitCsvLine(TableHandlerParser.CsvLineContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link TableHandlerParser#file}.
-	 * @param ctx the parse tree
-	 */
-	void enterFile(TableHandlerParser.FileContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link TableHandlerParser#file}.
-	 * @param ctx the parse tree
-	 */
-	void exitFile(TableHandlerParser.FileContext ctx);
-	/**
 	 * Enter a parse tree produced by {@link TableHandlerParser#stringExpr}.
 	 * @param ctx the parse tree
 	 */
@@ -534,4 +540,14 @@ public interface TableHandlerListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitDataType(TableHandlerParser.DataTypeContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link TableHandlerParser#file}.
+	 * @param ctx the parse tree
+	 */
+	void enterFile(TableHandlerParser.FileContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link TableHandlerParser#file}.
+	 * @param ctx the parse tree
+	 */
+	void exitFile(TableHandlerParser.FileContext ctx);
 }

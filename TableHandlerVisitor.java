@@ -34,11 +34,19 @@ public interface TableHandlerVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitAssignment(TableHandlerParser.AssignmentContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link TableHandlerParser#print}.
+	 * Visit a parse tree produced by the {@code printVar}
+	 * labeled alternative in {@link TableHandlerParser#print}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitPrint(TableHandlerParser.PrintContext ctx);
+	T visitPrintVar(TableHandlerParser.PrintVarContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code printExpr}
+	 * labeled alternative in {@link TableHandlerParser#print}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitPrintExpr(TableHandlerParser.PrintExprContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link TableHandlerParser#condition}.
 	 * @param ctx the parse tree
@@ -97,6 +105,13 @@ public interface TableHandlerVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitVar(TableHandlerParser.VarContext ctx);
 	/**
+	 * Visit a parse tree produced by the {@code Double}
+	 * labeled alternative in {@link TableHandlerParser#numExpr}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitDouble(TableHandlerParser.DoubleContext ctx);
+	/**
 	 * Visit a parse tree produced by the {@code Int}
 	 * labeled alternative in {@link TableHandlerParser#numExpr}.
 	 * @param ctx the parse tree
@@ -139,12 +154,6 @@ public interface TableHandlerVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitAddRowFrom(TableHandlerParser.AddRowFromContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link TableHandlerParser#remRow}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitRemRow(TableHandlerParser.RemRowContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link TableHandlerParser#getValue}.
 	 * @param ctx the parse tree
@@ -272,6 +281,12 @@ public interface TableHandlerVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitSort(TableHandlerParser.SortContext ctx);
 	/**
+	 * Visit a parse tree produced by {@link TableHandlerParser#sortDesc}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitSortDesc(TableHandlerParser.SortDescContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link TableHandlerParser#equals}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
@@ -302,18 +317,6 @@ public interface TableHandlerVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitPrintLast(TableHandlerParser.PrintLastContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link TableHandlerParser#csvLine}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitCsvLine(TableHandlerParser.CsvLineContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link TableHandlerParser#file}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitFile(TableHandlerParser.FileContext ctx);
-	/**
 	 * Visit a parse tree produced by {@link TableHandlerParser#stringExpr}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
@@ -325,4 +328,10 @@ public interface TableHandlerVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitDataType(TableHandlerParser.DataTypeContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link TableHandlerParser#file}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitFile(TableHandlerParser.FileContext ctx);
 }
