@@ -1,4 +1,0 @@
-antlr4 TableHandler.g4 && javac TableHandler*.java
-rm TableHandlerMain.java && antlr4-main -l Compiler.java TableHandler.g4 main &
-& javac TableHandlerMain.java
-java TableHandlerMain

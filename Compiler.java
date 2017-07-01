@@ -26,6 +26,11 @@ public class Compiler extends TableHandlerBaseListener {
 	}
 
 	@Override public void exitMain(TableHandlerParser.MainContext ctx) {
+		try (PrintWriter writer = new PrintWriter(new File("TableOutput.java"))){
+            writer.print(main.render());
+        } catch (Exception e) {
+            System.out.println("ERROR: couldn't generate java file...");
+        }
 		System.out.println(main.render());
 	}
 
@@ -159,8 +164,6 @@ public class Compiler extends TableHandlerBaseListener {
 	@Override public void exitInt(TableHandlerParser.IntContext ctx) {
 		ctx.value = ctx.INTEGER().getText();
 	}
-	@Override public void enterCompareExpr(TableHandlerParser.CompareExprContext ctx) { }
-	@Override public void exitCompareExpr(TableHandlerParser.CompareExprContext ctx) { }
 	@Override public void enterTableExpr(TableHandlerParser.TableExprContext ctx) { }
 	@Override public void exitTableExpr(TableHandlerParser.TableExprContext ctx) { }
 	
@@ -646,13 +649,4 @@ public class Compiler extends TableHandlerBaseListener {
 			System.err.println("ERROR: variable \"" + ctx.ID().getText() + "\" not declared...");
 		}
 	}
-	
-	@Override public void enterFile(TableHandlerParser.FileContext ctx) { }
-	@Override public void exitFile(TableHandlerParser.FileContext ctx) { }
-	@Override public void enterDataType(TableHandlerParser.DataTypeContext ctx) { }
-	@Override public void exitDataType(TableHandlerParser.DataTypeContext ctx) { }
-	@Override public void enterEveryRule(ParserRuleContext ctx) { }
-	@Override public void exitEveryRule(ParserRuleContext ctx) { }
-	@Override public void visitTerminal(TerminalNode node) { }
-	@Override public void visitErrorNode(ErrorNode node) { }
 }
