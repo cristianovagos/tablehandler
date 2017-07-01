@@ -6,14 +6,11 @@ public class THSemanticCheck extends TableHandlerBaseVisitor<Boolean> {
 
     public enum TYPE {NUMBER, BOOLEAN, STRING, ID, DOUBLE};
 
-    @Override public Boolean visitPrint(TableHandlerParser.PrintContext ctx)
-    { 
+    @Override public Boolean visitPrintExpr(TableHandlerParser.PrintExprContext ctx) {
         boolean res = visit(ctx.expr());
-        if(res && ((typeNode.get(ctx.expr()) != TYPE.BOOLEAN) || (typeNode.get(ctx.expr()) != TYPE.NUMBER) || 
-                   (typeNode.get(ctx.expr()) != TYPE.STRING) || (typeNode.get(ctx.expr()) != TYPE.DOUBLE) || 
-                   (typeNode.get(ctx.expr()) != TYPE.ID)))
+        if(res && typeNode.get(ctx.expr()) != TYPE.NUMBER)
         {
-            ErrorHandling.printError(ctx, " type expression " + ctx.expr().getText() + " is not defined!");
+            ErrorHandling.printError(ctx, "type expression " + ctx.expr().getText() + " is not a number!");
             res = false;
         }
         return res;
@@ -77,31 +74,7 @@ public class THSemanticCheck extends TableHandlerBaseVisitor<Boolean> {
         return true;
     }
 
-    @Override public Boolean visitBoolExprRelOp(TableHandlerParser.BoolExprRelOpContext ctx) { 
-        typeNode.put(ctx, TYPE.BOOLEAN);
-        boolean res = visit(ctx.boolExpr(0));
-        res = visit(ctx.boolExpr(1)) && res;
-        if (res && typeNode.get(ctx.boolExpr(0)) != typeNode.get(ctx.boolExpr(1))) {
-            ErrorHandling.printError(ctx, "operands of different type!");
-            res = false;
-        }
-
-        return res;
-    }
-
-    @Override public Boolean visitBoolPar(TableHandlerParser.BoolParContext ctx) {
-        boolean res = visit(ctx.boolExpr());
-        if (res)
-            typeNode.put(ctx, typeNode.get(ctx.boolExpr()));
-        return res;
-    }
-
-    @Override public Boolean visitBool(TableHandlerParser.BoolContext ctx) { 
-        typeNode.put(ctx, TYPE.BOOLEAN);
-        return true;
-    }
-
-    @Override public Boolean visitBoolVar(TableHandlerParser.BoolVarContext ctx) { 
+    @Override public Boolean visitVar(TableHandlerParser.VarContext ctx) {
         typeNode.put(ctx, TYPE.ID);
         return true;
     }
@@ -124,7 +97,7 @@ public class THSemanticCheck extends TableHandlerBaseVisitor<Boolean> {
 
     @Override public Boolean visitNewTable(TableHandlerParser.NewTableContext ctx) {
         boolean res = visit(ctx.file());
-        if(res && typeNode.get(ctx.file()) != TYPE.STRING)
+        if(res && typeNode.get(ctx.file()) != TYPE.ID)
         {
             ErrorHandling.printError(ctx, " type expression " + ctx.file().getText() + " is not defined!");
             res = false;
@@ -132,16 +105,14 @@ public class THSemanticCheck extends TableHandlerBaseVisitor<Boolean> {
         return res;
     }
 
-    @Override public Boolean visitString(TableHandlerParser.StringContext ctx) {
+    @Override public Boolean visitStringExpr(TableHandlerParser.StringExprContext ctx) {
         typeNode.put(ctx, TYPE.STRING);
         return true;
     }
 
-    @Override public Boolean visitStringPar(TableHandlerParser.StringParContext ctx) {
-        boolean res = visit(ctx.stringExpr());
-        if (res)
-            typeNode.put(ctx, typeNode.get(ctx.stringExpr()));
-        return res;
+    @Override public Boolean visitFile(TableHandlerParser.FileContext ctx) { 
+        typeNode.put(ctx, TYPE.ID);
+        return true;
     }
 
 }

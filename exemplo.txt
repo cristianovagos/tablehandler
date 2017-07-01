@@ -1,0 +1,20 @@
+int dummy;
+dummy = 3;
+print dummy;
+
+//Comentário idiota
+
+string str;
+str = "Cristiano";
+print str;
+
+/*
+ *Outro comentário idiota
+ *mas desta vez multi-line
+*/
+
+table tabela;
+table(read example.csv to tabela);
+table(print tabela);
+table(remove row at 2 from tabela);
+table(print tabela);
